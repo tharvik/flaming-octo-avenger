@@ -1,0 +1,5 @@
+.gitignore
+
+!cxx	= |> ^ CXX %f^ @(CXX) -o %o -c %f @(CXXFLAGS)	|> %B.o
+!ld	= |> ^ LD  %o^ @(CXX) -o %o    %f @(LDFLAGS)	|>
+!ln	= |> ^ LN  %o^ ln -s     %f    %o		|> %B
