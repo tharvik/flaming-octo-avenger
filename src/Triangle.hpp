@@ -5,10 +5,10 @@
 
 #include <string>
 
-class Plane : public Object {
+class Triangle : public Object {
 
 public:
-	Plane();
+	Triangle();
 
 private:
 	static std::vector<Attribute> get_attributes();

@@ -17,6 +17,8 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	GLuint get_id() const;
+
 private:
 	Shader<Vertex> vshader;
 	Shader<Fragment> fshader;

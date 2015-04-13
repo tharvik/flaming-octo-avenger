@@ -1,10 +1,22 @@
 #include "Plane.hpp"
 
+#include "Attribute.hpp"
+
 #include <array>
 
 Plane::Plane()
-	: Object("plane", get_points())
+	: Object("plane", get_attributes())
 {
+}
+
+std::vector<Attribute> Plane::get_attributes()
+{
+	std::vector<Attribute> attribs;
+
+	Attribute attr("vpoints", get_points());
+	attribs.push_back(attr);
+
+	return attribs;
 }
 
 std::vector<GLfloat> Plane::get_points()

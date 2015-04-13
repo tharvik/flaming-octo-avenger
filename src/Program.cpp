@@ -17,6 +17,8 @@ GLuint Program::get_program(Shader<Vertex> vshader, Shader<Fragment> fshader)
 
 	glLinkProgram(id);
 
+	glUseProgram(id);
+
 	Util::assert_no_glError();
 
 	return id;
@@ -36,4 +38,9 @@ void Program::bind() const
 void Program::unbind() const
 {
 	glUseProgram(0);
+}
+
+GLuint Program::get_id() const
+{
+	return this->id;
 }
