@@ -15,8 +15,10 @@ Object::Object(std::string const name, std::vector<GLfloat> const & points)
 
 Object::~Object()
 {
-	if (last_ref())
+	if (last_ref()) {
 		glDeleteBuffers(1, &vertex_buffer);
+		glDeleteVertexArrays(1, &vertex_array);
+	}
 }
 
 bool Object::operator<(Object const & obj) const
@@ -27,12 +29,16 @@ bool Object::operator<(Object const & obj) const
 void Object::draw() const
 {
 	program.bind();
+	Util::assert_no_glError();
 	glBindVertexArray(vertex_array);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+	Util::assert_no_glError();
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, this->num_elements);
+	Util::assert_no_glError();
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	Util::assert_no_glError();
 	glBindVertexArray(0);
 	program.unbind();
 

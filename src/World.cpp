@@ -25,12 +25,15 @@ World::World(std::string const name)
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
 
+	Util::assert_no_glError();
+
+	glewExperimental = true;
 	GLenum err = glewInit();
-	glGetError(); // clean error generated from glew
-	if (err != GLEW_OK) {
+	if (err != GLEW_NO_ERROR) {
 		std::cerr << glewGetErrorString(err) << std::endl;
 		throw "Unable to start glew"; // TODO use object
 	}
+	glGetError(); // clean error generated from glew
 
 	glClearColor(0.9, 0.9, 0.9, 1);
 

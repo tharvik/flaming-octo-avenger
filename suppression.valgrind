@@ -1,0 +1,43 @@
+{
+	glfwOpenWindow
+		Memcheck:Addr1
+		...
+		fun:glfwOpenWindow
+		...
+}
+{
+	glfwOpenWindow
+		Memcheck:Addr2
+		...
+		fun:glfwOpenWindow
+		...
+}
+{
+	glfwOpenWindow
+		Memcheck:Addr4
+		...
+		fun:glfwOpenWindow
+		...
+}
+{
+	glfwOpenWindow
+		Memcheck:Addr8
+		...
+		fun:glfwOpenWindow
+		...
+}
+{
+	glfwOpenWindow
+		Memcheck:Param
+		ioctl(generic)
+		...
+		fun:glfwOpenWindow
+		...
+}
+
+{
+	mesa
+		Memcheck:Addr4
+		...
+		obj:/usr/lib64/mesa/i965_dri.so
+}
