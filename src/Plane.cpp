@@ -5,7 +5,7 @@
 #include <array>
 
 Plane::Plane()
-	: Object("plane", get_attributes())
+	: Object("plane", get_attributes(), get_uniformes())
 {
 }
 
@@ -13,8 +13,20 @@ std::vector<Attribute> Plane::get_attributes()
 {
 	std::vector<Attribute> attribs;
 
-	Attribute attr("vpoints", get_points());
-	attribs.push_back(attr);
+	Attribute vpoint("position", get_points());
+
+	attribs.push_back(vpoint);
+
+	return attribs;
+}
+
+std::vector<Attribute> Plane::get_uniformes()
+{
+	std::vector<Attribute> attribs;
+
+	Attribute mvp("mvp", get_mvp());
+
+	attribs.push_back(mvp);
 
 	return attribs;
 }
@@ -35,4 +47,18 @@ std::vector<GLfloat> Plane::get_points()
 		points.push_back(e);
 
 	return points;
+}
+
+glm::mat4 Plane::get_mvp()
+{
+	glm::mat4 mat;
+
+	mat[0] = { 0.970836,	0, -0.485418,         0};
+	mat[1] = {-0.182574,	0.912871, -0.365148, -0.228218};
+	mat[2] = {-0.0408248,  -0.0408248,-0.0816497,  0.500104};
+	mat[3] = { 0,		0,         0,         1};
+
+	mat = glm::transpose(mat);
+
+	return mat;
 }

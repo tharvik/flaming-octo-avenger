@@ -44,3 +44,8 @@ GLuint Program::get_id() const
 {
 	return this->id;
 }
+
+bool Program::operator<(Program const & obj) const
+{
+	return this->id < obj.id;
+}

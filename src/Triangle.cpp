@@ -3,14 +3,14 @@
 #include <array>
 
 Triangle::Triangle()
-	: Object("triangle", get_attributes())
+	: Object("triangle", get_attributes(), std::vector<Attribute>())
 {}
 
 std::vector<Attribute> Triangle::get_attributes()
 {
 	std::vector<Attribute> attribs;
 
-	Attribute attr("vpoints", get_points());
+	Attribute attr("vpoint", get_points());
 	attribs.push_back(attr);
 
 	return attribs;

@@ -1,5 +1,5 @@
-#ifndef PLANE_HPP
-#define PLANE_HPP
+#ifndef TRIANGLE_HPP
+#define TRIANGLE_HPP
 
 #include "Object.hpp"
 

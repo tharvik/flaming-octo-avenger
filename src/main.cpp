@@ -1,3 +1,4 @@
+#include "Plane.hpp"
 #include "World.hpp"
 #include "Triangle.hpp"
 
@@ -13,7 +14,10 @@ int main()
 		World world("flaming-octo-avenger");
 
 		Triangle triangle;
-		world.add_object(triangle);
+		Plane plane;
+
+		//world.add_object(triangle);
+		world.add_object(plane);
 
 		world.main_loop();
 	} catch (Util::base_exception& e) {

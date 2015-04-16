@@ -12,7 +12,7 @@
 
 class Object : public Util::ref_counted {
 public:
-	Object(std::string const name, std::vector<Attribute> attribs);
+	Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes);
 	~Object();
 
 	void draw() const;
@@ -37,7 +37,8 @@ private:
 
 	static GLuint get_vertex_array();
 	static GLuint get_vertex_buffer(std::vector<GLfloat> const & points);
-	static GLuint get_vertex_attrib(GLuint const vertex_array, GLuint const vertex_attrib, Program const &program);
+	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, GLuint const vertex_attrib, Program const &program);
+	static void set_uniforme(Attribute const & attrib, Program const &program);
 };
 
 #endif

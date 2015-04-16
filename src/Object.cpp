@@ -4,11 +4,13 @@
 
 #include <iostream>
 
-Object::Object(std::string const name, std::vector<Attribute> attribs)
-	:
-	  program(name),
-	  attributes(get_attribs(program, attribs))
-{}
+Object::Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes)
+	: program(name),
+	  attributes(get_attribs(program, attributes))
+{
+	for (Attribute const & attrib : uniformes)
+		set_uniforme(attrib, program);
+}
 
 Object::~Object()
 {
@@ -19,18 +21,15 @@ Object::~Object()
 
 		GLuint vertex_array = std::get<0>(attrib);
 		GLuint vertex_buffer = std::get<1>(attrib);
-		GLuint vertex_attrib = std::get<2>(attrib);
-		size_t num_elements = std::get<3>(attrib);
 
-		//glDeleteBuffers(1, &vertex_buffer);
-		//glDeleteVertexArrays(1, &vertex_array);
+		glDeleteVertexArrays(1, &vertex_array);
+		glDeleteBuffers(1, &vertex_buffer);
 	}
 }
 
 bool Object::operator<(Object const & obj) const
 {
-	//return this->program < obj.program;
-	return false;
+	return this->program < obj.program;
 }
 
 void Object::draw() const
@@ -79,9 +78,9 @@ std::tuple<GLuint, GLuint, GLuint, size_t> Object::get_attrib(Program const & pr
 	size_t num_elements;
 
 	vertex_array = get_vertex_array();
-	vertex_buffer = get_vertex_buffer(attrib.points);
-	vertex_attrib = get_vertex_attrib(vertex_array, vertex_buffer, program);
-	num_elements = attrib.points.size();
+	vertex_buffer = get_vertex_buffer(attrib.value);
+	vertex_attrib = get_vertex_attrib(attrib.name, vertex_array, vertex_buffer, program);
+	num_elements = attrib.value.size();
 
 	return std::make_tuple(vertex_array, vertex_buffer, vertex_attrib, num_elements);
 }
@@ -110,14 +109,14 @@ GLuint Object::get_vertex_buffer(std::vector<GLfloat> const & points)
 	return vbo;
 }
 
-GLuint Object::get_vertex_attrib(GLuint vao, GLuint vbo, Program const &program)
+GLuint Object::get_vertex_attrib(std::string name, GLuint vao, GLuint vbo, Program const &program)
 {
 	GLuint attr;
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	attr = glGetAttribLocation(program.get_id(), "vpoint");
+	attr = glGetAttribLocation(program.get_id(), name.c_str());
 	glEnableVertexAttribArray(attr);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
@@ -130,4 +129,14 @@ GLuint Object::get_vertex_attrib(GLuint vao, GLuint vbo, Program const &program)
 	Util::assert_no_glError();
 
 	return attr;
+}
+
+void Object::set_uniforme(Attribute const & attrib, Program const &program)
+{
+	GLuint attr;
+
+	attr = glGetUniformLocation(program.get_id(), attrib.name.c_str());
+	glUniformMatrix4fv(attr, 1, GL_FALSE, attrib.value.data());
+
+	Util::assert_no_glError();
 }

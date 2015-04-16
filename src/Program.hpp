@@ -19,6 +19,8 @@ public:
 
 	GLuint get_id() const;
 
+	bool operator<(Program const & obj) const;
+
 private:
 	Shader<Vertex> vshader;
 	Shader<Fragment> fshader;
