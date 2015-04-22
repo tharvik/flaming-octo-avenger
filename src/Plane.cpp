@@ -5,7 +5,7 @@
 #include <array>
 
 Plane::Plane()
-	: Object("plane", get_attributes(), get_uniformes())
+	: Object("plane", get_attributes(), get_uniformes(), get_texture())
 {
 }
 
@@ -61,4 +61,13 @@ glm::mat4 Plane::get_mvp()
 	mat = glm::transpose(mat);
 
 	return mat;
+}
+
+std::set<Texture> Plane::get_texture()
+{
+	std::set<Texture> textures;
+
+	Texture tex("plane.png", "pattern");
+
+	return textures;
 }

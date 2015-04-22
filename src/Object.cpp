@@ -1,12 +1,11 @@
 #include "Object.hpp"
 
-#include "Util.hpp"
-
 #include <iostream>
 
-Object::Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes)
+Object::Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes, std::set<Texture> textures)
 	: program(name),
-	  attributes(get_attribs(program, attributes))
+	  attributes(get_attribs(program, attributes)),
+	  textures(textures)
 {
 	for (Attribute const & attrib : uniformes)
 		set_uniforme(attrib, program);
@@ -18,12 +17,8 @@ Object::~Object()
 		return;
 
 	for (auto const & attrib : attributes) {
-
-		GLuint vertex_array = std::get<0>(attrib);
-		GLuint vertex_buffer = std::get<1>(attrib);
-
-		glDeleteVertexArrays(1, &vertex_array);
-		glDeleteBuffers(1, &vertex_buffer);
+		glDeleteVertexArrays(1, &attrib.vertex_array);
+		glDeleteBuffers(1, &attrib.vertex_buffer);
 	}
 }
 
@@ -38,19 +33,14 @@ void Object::draw() const
 
 	for (auto & attrib : attributes) {
 
-		GLuint vertex_array = std::get<0>(attrib);
-		GLuint vertex_buffer = std::get<1>(attrib);
-		GLuint vertex_attrib = std::get<2>(attrib);
-		size_t num_elements = std::get<3>(attrib);
+		glBindVertexArray(attrib.vertex_array);
+		glEnableVertexAttribArray(attrib.id);
+		glBindBuffer(GL_ARRAY_BUFFER, attrib.vertex_buffer);
 
-		glBindVertexArray(vertex_array);
-		glEnableVertexAttribArray(vertex_attrib);
-		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, num_elements);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, attrib.num_elements);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDisableVertexAttribArray(vertex_attrib);
+		glDisableVertexAttribArray(attrib.id);
 		glBindVertexArray(0);
 	}
 
@@ -59,10 +49,10 @@ void Object::draw() const
 	Util::assert_no_glError();
 }
 
-std::vector<std::tuple<GLuint, GLuint, GLuint, size_t>>
+std::vector<Object::attribute>
 	Object::get_attribs(Program const & program, std::vector<Attribute> attribs)
 {
-	std::vector<std::tuple<GLuint, GLuint, GLuint, size_t>> attrs;
+	std::vector<attribute> attrs;
 
 	for (Attribute const & attri : attribs)
 		attrs.push_back(get_attrib(program, attri));
@@ -70,19 +60,16 @@ std::vector<std::tuple<GLuint, GLuint, GLuint, size_t>>
 	return attrs;
 }
 
-std::tuple<GLuint, GLuint, GLuint, size_t> Object::get_attrib(Program const & program, Attribute const & attrib)
+Object::attribute Object::get_attrib(Program const & program, Attribute const & attrib)
 {
-	GLuint vertex_array;
-	GLuint vertex_buffer;
-	GLuint vertex_attrib;
-	size_t num_elements;
+	attribute attr;
 
-	vertex_array = get_vertex_array();
-	vertex_buffer = get_vertex_buffer(attrib.value);
-	vertex_attrib = get_vertex_attrib(attrib.name, vertex_array, vertex_buffer, program);
-	num_elements = attrib.value.size();
+	attr.vertex_array = get_vertex_array();
+	attr.vertex_buffer = get_vertex_buffer(attrib.value);
+	attr.id = get_vertex_attrib(attrib.name, attr.vertex_array, attr.vertex_buffer, program);
+	attr.num_elements = attrib.value.size();
 
-	return std::make_tuple(vertex_array, vertex_buffer, vertex_attrib, num_elements);
+	return attr;
 }
 
 GLuint Object::get_vertex_array()
@@ -139,4 +126,12 @@ void Object::set_uniforme(Attribute const & attrib, Program const &program)
 	glUniformMatrix4fv(attr, 1, GL_FALSE, attrib.value.data());
 
 	Util::assert_no_glError();
+}
+void Object::set_texture(Program const & program, Texture const & texture)
+{
+	GLint tex_id = glGetUniformLocation(program.get_id(), texture.name.c_str());
+	if (tex_id < 0);
+		// TODO throw
+
+	glUniform1i(tex_id, texture.id);
 }

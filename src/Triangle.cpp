@@ -3,7 +3,7 @@
 #include <array>
 
 Triangle::Triangle()
-	: Object("triangle", get_attributes(), std::vector<Attribute>())
+	: Object("triangle", get_attributes(), std::vector<Attribute>(), std::set<Texture>())
 {}
 
 std::vector<Attribute> Triangle::get_attributes()

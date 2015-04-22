@@ -16,6 +16,7 @@ private:
 
 	static std::vector<GLfloat> get_points();
 	static glm::mat4 get_mvp();
+	static std::set<Texture> get_texture();
 };
 
 #endif

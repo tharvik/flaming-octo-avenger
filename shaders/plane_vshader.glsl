@@ -5,10 +5,10 @@ uniform mat4 mvp;
 //uniform float time;
 
 in vec2 position;
-//out vec2 uv;
+out vec2 uv;
 
 void main() {
-    //uv = (position + vec2(1.0, 1.0)) * 0.5;
+    uv = (position + vec2(1.0, 1.0)) * 0.5;
 
     // Convert the 2D position into 3D positions that all lay in a horizontal
     // plane.
