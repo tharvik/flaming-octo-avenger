@@ -7,17 +7,19 @@
 #include <vector>
 
 class Attribute {
-	public:
-		Attribute(std::string const name, std::vector<GLfloat> const value);
-		Attribute(std::string const name, glm::mat4 const value);
+public:
+	Attribute(std::string const name, std::vector<GLfloat> const value);
+	Attribute(std::string const name, glm::mat4 const value);
 
-		std::string const name;
-		std::vector<GLfloat> const value;
+	std::string const name;
+	std::vector<GLfloat> const value;
 
-	private:
-		// TODO mat4 -> mat<width,heigth>
-		template<size_t width, size_t heigth>
-		std::vector<GLfloat> mat_to_vec(glm::mat4 const value);
+	bool operator<(Attribute const & other) const;
+
+private:
+	// TODO mat4 -> mat<width,heigth>
+	template<size_t width, size_t heigth>
+	std::vector<GLfloat> mat_to_vec(glm::mat4 const value);
 };
 
 // TODO way to put it in cpp

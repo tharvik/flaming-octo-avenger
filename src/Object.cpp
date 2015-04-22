@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Object::Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes, std::set<Texture> textures)
+Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Attribute> uniformes, std::set<Texture> textures)
 	: program(name),
 	  attributes(get_attribs(program, attributes)),
 	  textures(textures)
@@ -49,13 +49,13 @@ void Object::draw() const
 	Util::assert_no_glError();
 }
 
-std::vector<Object::attribute>
-	Object::get_attribs(Program const & program, std::vector<Attribute> attribs)
+std::set<Object::attribute>
+	Object::get_attribs(Program const & program, std::set<Attribute> attribs)
 {
-	std::vector<attribute> attrs;
+	std::set<attribute> attrs;
 
 	for (Attribute const & attri : attribs)
-		attrs.push_back(get_attrib(program, attri));
+		attrs.insert(get_attrib(program, attri));
 
 	return attrs;
 }
@@ -134,4 +134,9 @@ void Object::set_texture(Program const & program, Texture const & texture)
 		// TODO throw
 
 	glUniform1i(tex_id, texture.id);
+}
+
+bool Object::attribute::operator<(attribute const & other) const
+{
+	return this->id < other.id;
 }

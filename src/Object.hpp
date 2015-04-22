@@ -14,7 +14,7 @@
 
 class Object : public Util::ref_counted {
 public:
-	Object(std::string const name, std::vector<Attribute> attributes, std::vector<Attribute> uniformes, std::set<Texture> textures);
+	Object(std::string const name, std::set<Attribute> attributes, std::set<Attribute> uniformes, std::set<Texture> textures);
 	~Object();
 
 	void draw() const;
@@ -29,12 +29,14 @@ private:
 		GLuint vertex_buffer;
 		GLuint id;
 		size_t num_elements;
+
+		bool operator<(attribute const & other) const;
 	};
-	std::vector<attribute> const attributes;
+	std::set<attribute> const attributes;
 	std::set<Texture> const textures;
 
-	static std::vector<attribute>
-		get_attribs(Program const & program, std::vector<Attribute> attribs);
+	static std::set<attribute>
+		get_attribs(Program const & program, std::set<Attribute> attribs);
 
 	static attribute
 		get_attrib(Program const & program, Attribute const & attrib);

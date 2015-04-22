@@ -11,7 +11,7 @@ public:
 	Triangle();
 
 private:
-	static std::vector<Attribute> get_attributes();
+	static std::set<Attribute> get_attributes();
 	static std::vector<GLfloat> get_points();
 };
 

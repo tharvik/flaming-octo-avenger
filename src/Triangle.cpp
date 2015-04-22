@@ -3,15 +3,15 @@
 #include <array>
 
 Triangle::Triangle()
-	: Object("triangle", get_attributes(), std::vector<Attribute>(), std::set<Texture>())
+	: Object("triangle", get_attributes(), std::set<Attribute>(), std::set<Texture>())
 {}
 
-std::vector<Attribute> Triangle::get_attributes()
+std::set<Attribute> Triangle::get_attributes()
 {
-	std::vector<Attribute> attribs;
+	std::set<Attribute> attribs;
 
 	Attribute attr("vpoint", get_points());
-	attribs.push_back(attr);
+	attribs.insert(attr);
 
 	return attribs;
 }

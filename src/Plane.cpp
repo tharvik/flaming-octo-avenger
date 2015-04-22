@@ -9,24 +9,24 @@ Plane::Plane()
 {
 }
 
-std::vector<Attribute> Plane::get_attributes()
+std::set<Attribute> Plane::get_attributes()
 {
-	std::vector<Attribute> attribs;
+	std::set<Attribute> attribs;
 
 	Attribute vpoint("position", get_points());
 
-	attribs.push_back(vpoint);
+	attribs.insert(vpoint);
 
 	return attribs;
 }
 
-std::vector<Attribute> Plane::get_uniformes()
+std::set<Attribute> Plane::get_uniformes()
 {
-	std::vector<Attribute> attribs;
+	std::set<Attribute> attribs;
 
 	Attribute mvp("mvp", get_mvp());
 
-	attribs.push_back(mvp);
+	attribs.insert(mvp);
 
 	return attribs;
 }

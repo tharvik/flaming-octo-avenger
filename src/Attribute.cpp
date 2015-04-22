@@ -8,3 +8,7 @@ Attribute::Attribute(std::string const name, glm::mat4 const value)
 	: name(name), value(mat_to_vec<4,4>(value))
 {}
 
+bool Attribute::operator<(Attribute const & other) const
+{
+	return this->name < other.name;
+}
