@@ -11,10 +11,6 @@
 # ADD_EXECUTABLE (executable ${YOUR_EXECUTABLE_SRCS})
 # TARGET_LINK_LIBRARIES (executable ${GLFW_LIBRARIES})
 #
-# TODO:
-# Lookup for windows
-# Allow the user to select to link to a shared library or to a static library.
-#
 # SEE:
 # - https://raw.github.com/progschj/OpenGL-Examples/master/cmake_modules/FindGLFW.cmake
 # 

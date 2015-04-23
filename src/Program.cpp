@@ -12,8 +12,8 @@ GLuint Program::get_program(Shader<Vertex> vshader, Shader<Fragment> fshader)
 {
 	GLuint id = glCreateProgram();
 
-	glAttachShader(id, vshader.get_id());
-	glAttachShader(id, fshader.get_id());
+	glAttachShader(id, vshader.id);
+	glAttachShader(id, fshader.id);
 
 	glLinkProgram(id);
 

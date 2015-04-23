@@ -52,7 +52,9 @@ const char* Util::base_exception::what() const noexcept
 
 Util::ref_counted::ref_counted()
 	: count(new size_t)
-{}
+{
+	*count = 0;
+}
 
 Util::ref_counted::ref_counted(const ref_counted & o)
 	: count(o.count)

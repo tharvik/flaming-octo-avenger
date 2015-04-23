@@ -6,10 +6,10 @@
 #define texture_base_path "textures/"
 
 Texture::Texture(std::string filename, std::string name)
-	: name(name), buffer_id(load_texture(filename, name)), id(get_id())
+	: name(name), buffer_id(load_texture(texture_base_path + filename, name)), id(get_id())
 {}
 
-GLuint Texture::load_texture(std::string filename, std::string name)
+GLuint Texture::load_texture(std::string path, std::string name)
 {
 	GLuint tex;
 
@@ -17,7 +17,7 @@ GLuint Texture::load_texture(std::string filename, std::string name)
 	memset(&image, 0, (sizeof image));
 	image.version = PNG_IMAGE_VERSION;
 
-	if (png_image_begin_read_from_file(&image, (texture_base_path + filename).c_str()) == 0);
+	if (png_image_begin_read_from_file(&image, (path).c_str()) == 0);
 		// TODO fail
 
 	image.format = PNG_FORMAT_RGBA;

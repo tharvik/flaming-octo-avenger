@@ -8,15 +8,30 @@
 
 #define shader_base_path "shaders/"
 
+/**
+ * Exception when a shader fail to compile
+ */
 class shader_fail_to_compile : public Util::base_exception {
 
 public:
+	/**
+	 * Construct a shader_fail_to_compile with the given shader id
+	 *
+	 * @param shader the id of the shader which fail to compile
+	 */
 	shader_fail_to_compile(GLuint shader)
 		: Util::base_exception("Fail to compile shader:\n" +
 				       get_log(shader))
 	{}
 
 private:
+	/**
+	 * Return the log of a given shader id
+	 *
+	 * @param shader id of the shader
+	 *
+	 * @return the log of a given shader id
+	 */
 	static std::string get_log(GLuint shader)
 	{
 		GLint length;
@@ -34,11 +49,19 @@ private:
 
 };
 
+/**
+ * Exception when a file was not found while loading
+ */
 class file_not_found : public Util::base_exception {
 
 public:
-	file_not_found(std::string const filename)
-		: Util::base_exception("Unable to open file \"" + filename + "\"")
+	/**
+	 * Construct a file_not_found with the given path
+	 *
+	 * @param path path of the file which fail to load
+	 */
+	file_not_found(std::string const path)
+		: Util::base_exception("Unable to open file \"" + path + "\"")
 	{}
 
 };
