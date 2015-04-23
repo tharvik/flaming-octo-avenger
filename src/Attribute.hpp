@@ -11,13 +11,6 @@
  */
 class Attribute {
 public:
-	/**
-	 * Construct an Attribute with the given name and value
-	 *
-	 * @param name name used by GLSL
-	 * @param value value to load into
-	 */
-	Attribute(std::string const name, std::vector<GLfloat> const value);
 
 	/**
 	 * Construct an Attribute with the given name and value
@@ -25,7 +18,8 @@ public:
 	 * @param name name used by GLSL
 	 * @param value value to load into
 	 */
-	Attribute(std::string const name, glm::mat4 const value);
+	template<typename T>
+	Attribute(std::string const name, T const value);
 
 	/**
 	 * The name used in GLSL
@@ -47,30 +41,22 @@ public:
 	bool operator<(Attribute const & other) const;
 
 private:
+
 	/**
-	 * Transform a mat4 into a value
+	 * Transform nearly (see implementation) any value into a std::vector<GLfloat>
 	 *
-	 * @param value glm::mat4 to read from
+	 * @param value value to read from
 	 *
-	 * @return vector representation of glm::mat4
+	 * @return vector representation of the value
 	 */
-	// TODO mat4 -> mat<width,heigth>
-	template<size_t width, size_t heigth>
-	std::vector<GLfloat> mat_to_vec(glm::mat4 const value);
+	template<typename T>
+	static std::vector<GLfloat> to_vec(T const value);
 };
 
-// TODO way to put it in cpp
-template<size_t width, size_t heigth>
-std::vector<GLfloat> Attribute::mat_to_vec(glm::mat4 const value)
-{
-	std::vector<GLfloat> vec;
-	size_t const size = width * heigth;
-
-	vec.reserve(size);
-	for (size_t i = 0; i < size; i++)
-		vec.push_back(value[i / heigth][i % width]);
-
-	return vec;
-}
+// TODO find a way to put it in .cpp
+template<typename T>
+Attribute::Attribute(std::string const name, T const value)
+	: name(name), value(to_vec<>(value))
+{}
 
 #endif
