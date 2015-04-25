@@ -13,13 +13,13 @@ public:
 	 * @param value value to load into
 	 */
 	template<typename T>
-	Uniform(std::string const name, T const value);
+	Uniform(std::string const name, GLenum const type, T const value);
 };
 
 // TODO find a way to put it in .cpp
 template<typename T>
-Uniform::Uniform(std::string const name, T const value)
-	: OpenGLValue(name, value)
+Uniform::Uniform(std::string const name, GLenum const type, T const value)
+	: OpenGLValue(name, type, value)
 {}
 
 #endif //FLAMING_OCTO_AVENGER_UNIFORM_H

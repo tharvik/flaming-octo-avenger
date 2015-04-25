@@ -2,7 +2,7 @@
 #define FLAMING_OCTO_AVENGER_OPENGLATTRIBUTE_H
 
 #include "Program.hpp"
-#include "Attribute.h"
+#include "Attribute.hpp"
 
 #include <set>
 
@@ -27,7 +27,7 @@ public:
 	/**
 	 * Number of elements in the vertex_buffer
 	 */
-	size_t num_elements;
+	GLsizei num_elements;
 
 	/**
 	 * Allow inserting into a set; base on the id
@@ -40,6 +40,8 @@ public:
 
 	static OpenGLAttribute get_concret(Program const & program, Attribute const & uniform);
 
+	void draw() const;
+
 private:
 	OpenGLAttribute(Program const & program, Attribute const & uniform);
 
@@ -48,16 +50,17 @@ private:
 	 *
 	 * @return a vertex array
 	 */
-	static GLuint get_vertex_array();
+	static GLuint get_vertex_array(Program const & program);
 
 	/**
 	 * Load the points in OpenGL and return the id of the buffer
 	 *
+	 * @param type type of buffer in OpenGL
 	 * @param points points to load into OpenGL
 	 *
 	 * @return id of the buffer in OpenGL
 	 */
-	static GLuint get_vertex_buffer(std::vector<GLfloat> const & points);
+	static GLuint get_vertex_buffer(GLenum const type, std::vector<OpenGLValue::element> const & points);
 
 	/**
 	 * Return the id of the vertex attribute

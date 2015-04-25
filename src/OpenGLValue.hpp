@@ -10,17 +10,6 @@
  * An attribute is a value shared by the Shaders
  */
 class OpenGLValue {
-protected:
-
-	/**
-	 * Construct an Attribute with the given name and value
-	 *
-	 * @param name name used by GLSL
-	 * @param value value to load into
-	 */
-	template<typename T>
-	OpenGLValue(std::string const name, T const value);
-
 public:
 	/**
 	 * The name used in GLSL
@@ -28,9 +17,24 @@ public:
 	std::string const name;
 
 	/**
-	 * The value to put into the Program
+	 * OpenGL type contained
 	 */
-	std::vector<GLfloat> const value;
+	GLenum const type;
+
+	union element {
+	#define OpenGLValue_macro(type, id) \
+		type as_##type;
+	#include "OpenGLValue.x"
+	#undef OpenGLValue_macro
+	};
+
+	/**
+	 * The values to put into the Program
+	 */
+	std::vector<element> const value;
+
+	template<typename T>
+	std::vector<T> as() const;
 
 	/**
 	 * Allow insertion into a set; based on the name
@@ -40,6 +44,18 @@ public:
 	 * @return this->name < other.name;
 	 */
 	bool operator<(OpenGLValue const & other) const;
+
+protected:
+
+	/**
+	 * Construct an Attribute with the given name and value
+	 *
+	 * @param name name used by GLSL
+	 * @param value value to load into
+	 */
+	template<typename T>
+	OpenGLValue(std::string const name, GLenum type, T const value);
+
 
 private:
 
@@ -51,13 +67,13 @@ private:
 	 * @return vector representation of the value
 	 */
 	template<typename T>
-	static std::vector<GLfloat> to_vec(T const value);
+	static std::vector<element> to_vec(T const value);
 };
 
 // TODO find a way to put it in .cpp
 template<typename T>
-OpenGLValue::OpenGLValue(std::string const name, T const value)
-	: name(name), value(to_vec<>(value))
+OpenGLValue::OpenGLValue(std::string const name, GLenum type, T const value)
+	: name(name), type(type), value(to_vec<>(value))
 {}
 
 #endif

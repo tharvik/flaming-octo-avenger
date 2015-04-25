@@ -10,13 +10,10 @@ int main()
 {
 	// TODO find a better way to unroll throw
 	try {
-
 		World world("flaming-octo-avenger");
 
-		Triangle triangle;
 		Plane plane;
 
-		//world.add_object(triangle);
 		world.add_object(plane);
 
 		world.main_loop();

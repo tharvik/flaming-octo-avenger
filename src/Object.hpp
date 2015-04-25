@@ -1,15 +1,15 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
-#include "Attribute.h"
+#include "Attribute.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
 
 #include "OpenGL.hpp"
-#include "Uniform.h"
-#include "Attribute.h"
+#include "Uniform.hpp"
+#include "Attribute.hpp"
 #include "OpenGLUniform.h"
-#include "OpenGLAttribute.h"
+#include "OpenGLAttribute.hpp"
 
 #include <set>
 #include <string>
@@ -83,34 +83,6 @@ private:
 	 */
 	static std::set<OpenGLAttribute>
 		get_attribs(Program const & program, std::set<Attribute> attribs);
-
-	/**
-	 * Return a vertex array
-	 *
-	 * @return a vertex array
-	 */
-	static GLuint get_vertex_array();
-
-	/**
-	 * Load the points in OpenGL and return the id of the buffer
-	 *
-	 * @param points points to load into OpenGL
-	 *
-	 * @return id of the buffer in OpenGL
-	 */
-	static GLuint get_vertex_buffer(std::vector<GLfloat> const & points);
-
-	/**
-	 * Return the id of the vertex attribute
-	 *
-	 * @param name name of the Attribute to look for
-	 * @param vertex_array vertex array to bind
-	 * @param vertex_buffer vertex buffer to read the points from
-	 * @param program Program to look the Attribute into
-	 *
-	 * @return the id of the vertex attribute
-	 */
-	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, GLuint const vertex_buffer, Program const &program);
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "Triangle.hpp"
-#include "Attribute.h"
+#include "Attribute.hpp"
 
 #include <array>
 
@@ -11,7 +11,7 @@ std::set<Attribute> Triangle::get_attributes()
 {
 	std::set<Attribute> attribs;
 
-	Attribute attr("vpoint", get_points());
+	Attribute attr(GL_ARRAY_BUFFER, GL_FLOAT, get_points(), "vpoint");
 	attribs.insert(attr);
 
 	return attribs;
@@ -23,8 +23,8 @@ std::vector<GLfloat> Triangle::get_points()
 
 	std::array<GLfloat, 3 * 3> array = {
 		-1, -1,  0,
-		+1, -1,  0,
-		 0, +1,  0
+		 1, -1,  0,
+		 0,  1,  0
 	};
 
 	points.reserve(array.size());

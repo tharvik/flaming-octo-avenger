@@ -16,7 +16,7 @@ OpenGLUniform OpenGLUniform::get_concret(Program const & program, Uniform const 
 	GLuint id;
 
 	id = glGetUniformLocation(program.get_id(), uniform.name.c_str());
-	glUniformMatrix4fv(id, 1, GL_FALSE, uniform.value.data());
+	glUniformMatrix4fv(id, 1, GL_FALSE, uniform.as<GLfloat>().data());
 
 	Util::assert_no_glError();
 

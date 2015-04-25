@@ -2,8 +2,8 @@
 #define FLAMING_OCTO_AVENGER_OPENGLUNIFORM_H
 
 #include "Program.hpp"
-#include "Attribute.h"
-#include "Uniform.h"
+#include "Attribute.hpp"
+#include "Uniform.hpp"
 
 class OpenGLUniform {
 public:

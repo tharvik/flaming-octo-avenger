@@ -2,7 +2,7 @@
 #define PLANE_HPP
 
 #include "Object.hpp"
-#include "Attribute.h"
+#include "Attribute.hpp"
 
 #include <string>
 
@@ -15,9 +15,11 @@ public:
 	/**
 	 * Construct a Plane, forward everything to Object
 	 */
-	Plane();
+	Plane(size_t const size = 100);
 
 private:
+	size_t const size;
+
 	/**
 	 * Return all the attributes
 	 *
@@ -38,6 +40,13 @@ private:
 	 * @return the points to draw
 	 */
 	static std::vector<GLfloat> get_points();
+
+	/**
+	 * Return the indices of the points to draw
+	 *
+	 * @return the indices of the points to draw
+	 */
+	static std::vector<GLuint> get_indices();
 
 	/**
 	 * Return the model-view-projection matrix
