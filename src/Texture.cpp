@@ -6,10 +6,10 @@
 #define texture_base_path "textures/"
 
 Texture::Texture(std::string filename, std::string name)
-	: name(name), buffer_id(load_texture(texture_base_path + filename, name)), id(get_id())
+	: name(name), id(get_id()), buffer_id(load_texture(id, texture_base_path + filename, name))
 {}
 
-GLuint Texture::load_texture(std::string path, std::string name)
+GLuint Texture::load_texture(GLenum id, std::string path, std::string name)
 {
 	GLuint tex;
 
@@ -29,6 +29,7 @@ GLuint Texture::load_texture(std::string path, std::string name)
 
 	//fprintf(stderr, "pngtopng: error: %s\n", image.message); TODO throw message
 
+	glActiveTexture(id);
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -38,9 +39,9 @@ GLuint Texture::load_texture(std::string path, std::string name)
 	return tex;
 }
 
-GLuint Texture::get_id()
+GLenum Texture::get_id()
 {
-	static GLuint id = 0;
+	static GLuint id = GL_TEXTURE0;
 
 	return id++;
 }

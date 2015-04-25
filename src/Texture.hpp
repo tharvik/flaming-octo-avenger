@@ -1,6 +1,8 @@
 #ifndef FLAMING_OCTO_AVENGER_TEXTURE_H
 #define FLAMING_OCTO_AVENGER_TEXTURE_H
 
+class Texture;
+
 #include "Program.hpp"
 
 #include "OpenGL.hpp"
@@ -31,12 +33,12 @@ public:
 	 */
 	GLuint const id;
 
-private:
 	/**
 	 * The buffer created with OpenGL
 	 */
 	GLuint const buffer_id;
 
+private:
 	/**
 	 * Load the texture base on the given path and name use by GLSL
 	 *
@@ -45,15 +47,14 @@ private:
 	 *
 	 * @return the id of the buffer of the loaded texture
 	 */
-	static GLuint load_texture(std::string path, std::string glsl_name);
+	static GLuint load_texture(GLenum id, std::string path, std::string glsl_name);
 
 	/**
 	 * Return a new unique id for the texture
 	 *
 	 * @return a new unique id for the texture
 	 */
-	//TODO Limitation? Bits of try and fail
-	static GLuint get_id();
+	static GLenum get_id();
 };
 
 #endif //FLAMING_OCTO_AVENGER_TEXTURE_H
