@@ -56,27 +56,15 @@ void Object::draw() const
 	Util::assert_no_glError();
 }
 
-std::set<Object::attribute>
+std::set<OpenGLAttribute>
 	Object::get_attribs(Program const & program, std::set<Attribute> attribs)
 {
-	std::set<attribute> attrs;
+	std::set<OpenGLAttribute> attrs;
 
 	for (auto const & attri : attribs)
-		attrs.insert(get_attrib(program, attri));
+		attrs.insert(OpenGLAttribute::get_concret(program, attri));
 
 	return attrs;
-}
-
-Object::attribute Object::get_attrib(Program const & program, Attribute const & attrib)
-{
-	attribute attr;
-
-	attr.vertex_array = get_vertex_array();
-	attr.vertex_buffer = get_vertex_buffer(attrib.value);
-	attr.id = get_vertex_attrib(attrib.name, attr.vertex_array, attr.vertex_buffer, program);
-	attr.num_elements = attrib.value.size();
-
-	return attr;
 }
 
 GLuint Object::get_vertex_array()
@@ -123,18 +111,4 @@ GLuint Object::get_vertex_attrib(std::string name, GLuint vao, GLuint vbo, Progr
 	Util::assert_no_glError();
 
 	return attr;
-}
-
-void Object::set_texture(Program const & program, Texture const & texture)
-{
-	GLint tex_id = glGetUniformLocation(program.get_id(), texture.name.c_str());
-	if (tex_id < 0) {}
-		// TODO throw
-
-	glUniform1i(tex_id, texture.id);
-}
-
-bool Object::attribute::operator<(attribute const & other) const
-{
-	return this->id < other.id;
 }

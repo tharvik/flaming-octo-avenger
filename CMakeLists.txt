@@ -3,7 +3,7 @@ project(flaming_octo_avenger)
 
 include(cmake/icg_settings.cmake)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 
 set(SOURCE_FILES
     src/Attribute.cpp
@@ -31,5 +31,5 @@ set(SOURCE_FILES
     src/Uniform.h
     src/World.hpp)
 
-add_executable(flaming_octo_avenger ${SOURCE_FILES})
+add_executable(flaming_octo_avenger ${SOURCE_FILES} src/OpenGLUniform.cpp src/OpenGLUniform.h src/OpenGLAttribute.cpp src/OpenGLAttribute.h)
 target_link_libraries(flaming_octo_avenger ${COMMON_LIBS})

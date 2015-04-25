@@ -47,7 +47,7 @@ private:
 	 *
 	 * @return the id of the buffer of the loaded texture
 	 */
-	static GLuint load_texture(GLenum id, std::string path, std::string glsl_name);
+	static GLuint load_texture(GLenum id, std::string path);
 
 	/**
 	 * Return a new unique id for the texture

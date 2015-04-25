@@ -9,6 +9,7 @@
 #include "Uniform.h"
 #include "Attribute.h"
 #include "OpenGLUniform.h"
+#include "OpenGLAttribute.h"
 
 #include <set>
 #include <string>
@@ -56,41 +57,6 @@ private:
 	Program program;
 
 	/**
-	 * Struct easier to work with when on the OpenGL side than the Attribute class
-	 */
-	struct attribute {
-
-		/**
-		 * Vertex array buffer; set of information about a given buffer, size; not much used yet
-		 */
-		GLuint vertex_array;
-
-		/**
-		 * Where, in OpenGL, are the vertex stored
-		 */
-		GLuint vertex_buffer;
-
-		/**
-		 * Number of elements in the vertex_buffer
-		 */
-		size_t num_elements;
-
-		/**
-		 * Location of the Attribute.name inside OpenGL
-		 */
-		GLuint id;
-
-		/**
-		 * Allow inserting into a set; base on the id
-		 *
-		 * @param other attribute to compare with
-		 *
-		 * @return this->id < other.id;
-		 */
-		bool operator<(attribute const & other) const;
-	};
-
-	/**
 	 * Set of OpenGLUniform to attach
 	 */
 	std::set<OpenGLUniform> uniforms;
@@ -100,7 +66,7 @@ private:
 	/**
 	 * Set of attribute to attach
 	 */
-	std::set<attribute> const attributes;
+	std::set<OpenGLAttribute> const attributes;
 
 	/**
 	 * Set of Texture to attach
@@ -111,23 +77,12 @@ private:
 	 * Return the set of attribute based on the given set of Attribute
 	 *
 	 * @param program Program to find the given Attribute
-	 * @param attribs set of Attribute to set
+	 * @param attribs set of Attribute to setJ
 	 *
 	 * @return the set of attribute based on the given set of Attribute
 	 */
-	static std::set<attribute>
+	static std::set<OpenGLAttribute>
 		get_attribs(Program const & program, std::set<Attribute> attribs);
-
-	/**
-	 * Return an attribute base on the given Attribute
-	 *
-	 * @param program to find the Attribute into
-	 * @param attrib Attribute to find
-	 *
-	 * @return an attribute base on the given Attribute
-	 */
-	static attribute
-		get_attrib(Program const & program, Attribute const & attrib);
 
 	/**
 	 * Return a vertex array
@@ -156,14 +111,6 @@ private:
 	 * @return the id of the vertex attribute
 	 */
 	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, GLuint const vertex_buffer, Program const &program);
-
-	/**
-	 * Set in OpenGL the value of the given Program
-	 *
-	 * @param program Program to find the given Attribute
-	 * @param texture Texture to set
-	 */
-	static void set_texture(Program const & program, Texture const & texture);
 };
 
 #endif
