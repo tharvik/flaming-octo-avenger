@@ -8,6 +8,7 @@
 #include "OpenGL.hpp"
 #include "Uniform.h"
 #include "Attribute.h"
+#include "OpenGLUniform.h"
 
 #include <set>
 #include <string>
@@ -90,6 +91,13 @@ private:
 	};
 
 	/**
+	 * Set of OpenGLUniform to attach
+	 */
+	std::set<OpenGLUniform> uniforms;
+
+	void set_uniforms(std::set<Uniform> uniforms);
+
+	/**
 	 * Set of attribute to attach
 	 */
 	std::set<attribute> const attributes;
@@ -148,14 +156,6 @@ private:
 	 * @return the id of the vertex attribute
 	 */
 	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, GLuint const vertex_buffer, Program const &program);
-
-	/**
-	 * Set in OpenGL the value of the given Attribute
-	 *
-	 * @param attrib Attribute to set
-	 * @param program Program to find the given Attribute
-	 */
-	static void set_uniforme(Uniform const & attrib, Program const &program);
 
 	/**
 	 * Set in OpenGL the value of the given Program

@@ -2,13 +2,20 @@
 
 #include <iostream>
 
-Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniformes, std::set<Texture> textures)
+Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniforms, std::set<Texture> textures)
 	: program(name),
 	  attributes(get_attribs(program, attributes)),
 	  textures(textures)
 {
-	for (auto const & attrib : uniformes)
-		set_uniforme(attrib, program);
+	set_uniforms(uniforms);
+}
+
+void Object::set_uniforms(std::set<Uniform> uniforms)
+{
+	this->uniforms.clear();
+
+	for (auto const & uniform : uniforms)
+		this->uniforms.insert(OpenGLUniform::get_concret(this->program, uniform));
 }
 
 Object::~Object()
@@ -118,19 +125,10 @@ GLuint Object::get_vertex_attrib(std::string name, GLuint vao, GLuint vbo, Progr
 	return attr;
 }
 
-void Object::set_uniforme(Uniform const & attrib, Program const &program)
-{
-	GLuint attr;
-
-	attr = glGetUniformLocation(program.get_id(), attrib.name.c_str());
-	glUniformMatrix4fv(attr, 1, GL_FALSE, attrib.value.data());
-
-	Util::assert_no_glError();
-}
 void Object::set_texture(Program const & program, Texture const & texture)
 {
 	GLint tex_id = glGetUniformLocation(program.get_id(), texture.name.c_str());
-	if (tex_id < 0);
+	if (tex_id < 0) {}
 		// TODO throw
 
 	glUniform1i(tex_id, texture.id);

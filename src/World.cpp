@@ -53,7 +53,7 @@ void World::key_callback(GLFWwindow* window,
 
 void World::error_callback(int error, const char* description)
 {
-	std::cerr << description << std::endl;
+	std::cerr << error << ":" << description << std::endl;
 }
 
 void World::add_object(Object obj)
