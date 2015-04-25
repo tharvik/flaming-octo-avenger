@@ -1,6 +1,7 @@
 #include "Plane.hpp"
 
-#include "Attribute.hpp"
+#include "OpenGLValue.hpp"
+#include "Attribute.h"
 
 #include <array>
 
@@ -20,11 +21,11 @@ std::set<Attribute> Plane::get_attributes()
 	return attribs;
 }
 
-std::set<Attribute> Plane::get_uniformes()
+std::set<Uniform> Plane::get_uniformes()
 {
-	std::set<Attribute> attribs;
+	std::set<Uniform> attribs;
 
-	Attribute mvp("mvp", get_mvp());
+	Uniform mvp("mvp", get_mvp());
 
 	attribs.insert(mvp);
 

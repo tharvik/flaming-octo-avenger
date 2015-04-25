@@ -2,6 +2,7 @@
 #define PLANE_HPP
 
 #include "Object.hpp"
+#include "Attribute.h"
 
 #include <string>
 
@@ -29,7 +30,7 @@ private:
 	 *
 	 * @return the uniformes
 	 */
-	static std::set<Attribute> get_uniformes();
+	static std::set<Uniform> get_uniformes();
 
 	/**
 	 * Return the points to draw

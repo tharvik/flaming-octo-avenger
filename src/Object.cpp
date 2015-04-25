@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Attribute> uniformes, std::set<Texture> textures)
+Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniformes, std::set<Texture> textures)
 	: program(name),
 	  attributes(get_attribs(program, attributes)),
 	  textures(textures)
 {
-	for (Attribute const & attrib : uniformes)
+	for (auto const & attrib : uniformes)
 		set_uniforme(attrib, program);
 }
 
@@ -54,7 +54,7 @@ std::set<Object::attribute>
 {
 	std::set<attribute> attrs;
 
-	for (Attribute const & attri : attribs)
+	for (auto const & attri : attribs)
 		attrs.insert(get_attrib(program, attri));
 
 	return attrs;
@@ -118,7 +118,7 @@ GLuint Object::get_vertex_attrib(std::string name, GLuint vao, GLuint vbo, Progr
 	return attr;
 }
 
-void Object::set_uniforme(Attribute const & attrib, Program const &program)
+void Object::set_uniforme(Uniform const & attrib, Program const &program)
 {
 	GLuint attr;
 

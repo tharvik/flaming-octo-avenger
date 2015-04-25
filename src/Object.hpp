@@ -1,11 +1,13 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
-#include "Attribute.hpp"
+#include "Attribute.h"
 #include "Program.hpp"
 #include "Texture.hpp"
 
 #include "OpenGL.hpp"
+#include "Uniform.h"
+#include "Attribute.h"
 
 #include <set>
 #include <string>
@@ -25,7 +27,7 @@ public:
 	 * @param uniformes set of uniforme
 	 * @param textures set of Texture
 	 */
-	Object(std::string const name, std::set<Attribute> attributes, std::set<Attribute> uniformes, std::set<Texture> textures);
+	Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniformes, std::set<Texture> textures);
 
 	/**
 	 * Destructor; need to delete the allocated buffers
@@ -153,7 +155,7 @@ private:
 	 * @param attrib Attribute to set
 	 * @param program Program to find the given Attribute
 	 */
-	static void set_uniforme(Attribute const & attrib, Program const &program);
+	static void set_uniforme(Uniform const & attrib, Program const &program);
 
 	/**
 	 * Set in OpenGL the value of the given Program

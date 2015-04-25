@@ -1,9 +1,10 @@
 #include "Triangle.hpp"
+#include "Attribute.h"
 
 #include <array>
 
 Triangle::Triangle()
-	: Object("triangle", get_attributes(), std::set<Attribute>(), std::set<Texture>())
+	: Object("triangle", get_attributes(), std::set<Uniform>(), std::set<Texture>())
 {}
 
 std::set<Attribute> Triangle::get_attributes()

@@ -9,8 +9,8 @@
 /**
  * An attribute is a value shared by the Shaders
  */
-class Attribute {
-public:
+class OpenGLValue {
+protected:
 
 	/**
 	 * Construct an Attribute with the given name and value
@@ -19,8 +19,9 @@ public:
 	 * @param value value to load into
 	 */
 	template<typename T>
-	Attribute(std::string const name, T const value);
+	OpenGLValue(std::string const name, T const value);
 
+public:
 	/**
 	 * The name used in GLSL
 	 */
@@ -38,7 +39,7 @@ public:
 	 *
 	 * @return this->name < other.name;
 	 */
-	bool operator<(Attribute const & other) const;
+	bool operator<(OpenGLValue const & other) const;
 
 private:
 
@@ -55,7 +56,7 @@ private:
 
 // TODO find a way to put it in .cpp
 template<typename T>
-Attribute::Attribute(std::string const name, T const value)
+OpenGLValue::OpenGLValue(std::string const name, T const value)
 	: name(name), value(to_vec<>(value))
 {}
 
