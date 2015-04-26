@@ -3,7 +3,7 @@
 Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniforms, std::set<Texture> textures)
 	: program(name),
 	  attributes(get_attribs(program, attributes)),
-	  textures(textures)
+	  textures(get_texture(program, textures))
 {
 	set_uniforms(uniforms);
 }
@@ -56,4 +56,15 @@ std::set<OpenGLAttribute>
 		attrs.insert(OpenGLAttribute::get_concret(program, attri));
 
 	return attrs;
+}
+
+std::set<OpenGLTexture>
+	Object::get_texture(Program const & program, std::set<Texture> textures)
+{
+	std::set<OpenGLTexture> texs;
+
+	for (auto const & tex : textures)
+		texs.emplace(program, tex);
+
+	return texs;
 }

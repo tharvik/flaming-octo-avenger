@@ -17,19 +17,19 @@ GLuint Texture::load_texture(GLenum id, std::string path)
 	memset(&image, 0, (sizeof image));
 	image.version = PNG_IMAGE_VERSION;
 
-	if (png_image_begin_read_from_file(&image, (path).c_str()) == 0) {}
-		// TODO fail
+	if (png_image_begin_read_from_file(&image, (path).c_str()) == 0)
+		throw std::string("pngtopng: error: ") + image.message;
 
 	image.format = PNG_FORMAT_RGBA;
 
 	png_bytep buffer = new png_byte[PNG_IMAGE_SIZE(image)];
 
-	if (!png_image_finish_read(&image, NULL/*background*/, buffer, 0/*row_stride*/, NULL/*colormap*/) != 0)
+	if (!png_image_finish_read(&image, NULL/*background*/, buffer, 0/*row_stride*/, NULL/*colormap*/) != 0) {
 		delete[](buffer);
+		throw std::string("pngtopng: error: ") + image.message;
+	}
 
-	//fprintf(stderr, "pngtopng: error: %s\n", image.message); TODO throw message
-
-	glActiveTexture(id);
+	glActiveTexture(id + GL_TEXTURE0);
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -41,7 +41,7 @@ GLuint Texture::load_texture(GLenum id, std::string path)
 
 GLenum Texture::get_id()
 {
-	static GLuint id = GL_TEXTURE0;
+	static GLuint id;
 
 	return id++;
 }

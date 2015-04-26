@@ -2,6 +2,8 @@
 
 #include "OpenGL.hpp"
 
+#include <iostream>
+
 OpenGLUniform::OpenGLUniform(GLuint id)
 	: id(id)
 {}
@@ -18,7 +20,7 @@ OpenGLUniform OpenGLUniform::get_concret(Program const & program, Uniform const 
 {
 	GLuint id;
 
-	id = glGetUniformLocation(program.get_id(), uniform.name.c_str());
+	id = glGetUniformLocation(program.id, uniform.name.c_str());
 	glUniformMatrix4fv(id, 1, GL_FALSE, uniform.value.as<GLfloat>().data());
 
 	Util::assert_no_glError();

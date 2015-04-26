@@ -6,9 +6,11 @@
 
 #include <iostream>
 
+/**
+ * @todo find a better way to unroll throw
+ */
 int main()
 {
-	// TODO find a better way to unroll throw
 	try {
 		World world("flaming-octo-avenger");
 
@@ -19,5 +21,7 @@ int main()
 		world.main_loop();
 	} catch (Util::base_exception& e) {
 		std::cerr << e.what() << std::endl;
+	} catch (std::string& e) {
+		std::cerr << e << std::endl;
 	}
 }

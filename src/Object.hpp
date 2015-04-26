@@ -2,14 +2,14 @@
 #define OBJECT_HPP
 
 #include "Attribute.hpp"
+#include "OpenGLAttribute.hpp"
+#include "OpenGLTexture.hpp"
+#include "OpenGLUniform.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
+#include "Uniform.hpp"
 
 #include "OpenGL.hpp"
-#include "Uniform.hpp"
-#include "Attribute.hpp"
-#include "OpenGLUniform.hpp"
-#include "OpenGLAttribute.hpp"
 
 #include <set>
 #include <string>
@@ -71,7 +71,7 @@ private:
 	/**
 	 * Set of Texture to attach
 	 */
-	std::set<Texture> const textures;
+	std::set<OpenGLTexture> const textures;
 
 	/**
 	 * Return the set of attribute based on the given set of Attribute
@@ -83,6 +83,9 @@ private:
 	 */
 	static std::set<OpenGLAttribute>
 		get_attribs(Program const & program, std::set<Attribute> attribs);
+
+	static std::set<OpenGLTexture>
+		get_texture(Program const & program, std::set<Texture> textures);
 };
 
 #endif

@@ -1,10 +1,11 @@
 #version 330 core
-in vec3 vcolor;
-out vec3 color;
+
+uniform sampler2D tex;
+
 in vec2 uv;
-uniform sampler2D pattern;
+
+out vec3 color;
 
 void main() {
-    color = texture(pattern, uv).rgb;
-    //color = vcolor;
+    color = texture(tex, uv).rgb;
 }

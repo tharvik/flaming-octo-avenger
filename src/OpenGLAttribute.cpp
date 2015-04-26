@@ -1,5 +1,7 @@
 #include "OpenGLAttribute.hpp"
 
+#include <iostream>
+
 bool OpenGLAttribute::operator<(OpenGLAttribute const & other) const
 {
 	return this->id < other.id;
@@ -69,7 +71,7 @@ GLuint OpenGLAttribute::get_vertex_attrib(std::string name, GLuint vao, std::set
 	//glBindVertexArray(vao);
 	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	attr = glGetAttribLocation(program.get_id(), name.c_str());
+	attr = glGetAttribLocation(program.id, name.c_str());
 	glEnableVertexAttribArray(attr);
 	glVertexAttribPointer(attr, 3, GL_FLOAT, GL_FALSE, 0, 0);
 

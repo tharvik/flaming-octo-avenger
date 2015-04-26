@@ -3,19 +3,17 @@
 #include "OpenGLValue.hpp"
 #include "Attribute.hpp"
 
-// TODO use size instead of hardcoded grid_res
-
 Plane::Plane(size_t const size)
-	: Object("plane", get_attributes(), get_uniformes(), get_texture()), size(size)
+	: Object("plane", get_attributes(size), get_uniformes(), get_texture()), size(size)
 {
 }
 
-std::set<Attribute> Plane::get_attributes()
+std::set<Attribute> Plane::get_attributes(size_t const size)
 {
 	std::set<std::tuple<GLenum, OpenGLValue>> values;
 
-	OpenGLValue points(GL_FLOAT, get_points());
-	OpenGLValue indices(GL_UNSIGNED_INT, get_indices());
+	OpenGLValue points(GL_FLOAT, get_points(size));
+	OpenGLValue indices(GL_UNSIGNED_INT, get_indices(size));
 
 	values.emplace(GL_ARRAY_BUFFER, points);
 	values.emplace(GL_ELEMENT_ARRAY_BUFFER, indices);
@@ -36,18 +34,17 @@ std::set<Uniform> Plane::get_uniformes()
 	return attribs;
 }
 
-std::vector<GLfloat> Plane::get_points()
+std::vector<GLfloat> Plane::get_points(size_t const size)
 {
 	std::vector<GLfloat> vertices;
-	size_t const grid_res = 100;
 
-	size_t const reserve = 2 * (grid_res + 1) * (grid_res + 1);
+	size_t const reserve = 2 * (size + 1) * (size + 1);
 	vertices.reserve(reserve);
-	float const delta = grid_res / 2.f;
+	float const delta = size / 2.f;
 	for(float i = - delta; i <= delta; ++i) {
-		float const offset_x = i * 2 / grid_res;
+		float const offset_x = i * 2 / size;
 		for(float j = - delta; j <= delta; ++j) {
-			float const offset_y = j * 2 / grid_res;
+			float const offset_y = j * 2 / size;
 			vertices.push_back(offset_y);
 			vertices.push_back(offset_x);
 			vertices.push_back(0);
@@ -57,17 +54,16 @@ std::vector<GLfloat> Plane::get_points()
 	return vertices;
 }
 
-std::vector<GLuint> Plane::get_indices()
+std::vector<GLuint> Plane::get_indices(size_t const size)
 {
 	std::vector<GLuint> indices;
-	size_t const grid_res = 100;
 
-	for(size_t i = 0; i < grid_res; ++i) {
-		for(size_t j = 0; j < grid_res; ++j) {
-			size_t const lb = (grid_res + 1) * i + j;
-			size_t const lt = (grid_res + 1) * i + j + 1;
-			size_t const rb = (grid_res + 1) * (i + 1) + j;
-			size_t const rt = (grid_res + 1) * (i + 1) + j + 1;
+	for(size_t i = 0; i < size; ++i) {
+		for(size_t j = 0; j < size; ++j) {
+			size_t const lb = (size + 1) * i + j;
+			size_t const lt = (size + 1) * i + j + 1;
+			size_t const rb = (size + 1) * (i + 1) + j;
+			size_t const rt = (size + 1) * (i + 1) + j + 1;
 			indices.push_back(lb);
 			indices.push_back(rb);
 			indices.push_back(lt);
@@ -101,8 +97,8 @@ std::set<Texture> Plane::get_texture()
 {
 	std::set<Texture> textures;
 
-	textures.emplace("pattern.png", "pattern");
 	textures.emplace("plane.png", "tex");
+	textures.emplace("pattern.png", "pattern");
 
 	return textures;
 }

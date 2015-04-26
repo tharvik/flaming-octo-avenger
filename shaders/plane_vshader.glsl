@@ -1,14 +1,11 @@
 #version 330 core
 
 uniform mat4 mvp;
-
-//uniform float time;
 uniform sampler2D pattern;
 
 in vec2 position;
-out vec2 uv;
 
-out vec3 vcolor;
+out vec2 uv;
 
 void main() {
     uv = (position + vec2(1.0, 1.0)) * 0.5;
@@ -25,7 +22,7 @@ void main() {
 
     //vcolor = vec3(height,0,0);
     //vcolor = texture(pattern, uv / 4).rgb;
-    vcolor = vec3(texture(pattern, uv).y,0,0);
+    //vcolor = vec3(texture(pattern, uv).y,0,0);
 
     /*vec2 uv2 = -uv;
 

@@ -25,7 +25,7 @@ private:
 	 *
 	 * @return the attributes
 	 */
-	static std::set<Attribute> get_attributes();
+	static std::set<Attribute> get_attributes(size_t const size);
 
 	/**
 	 * Return all the uniformes
@@ -39,14 +39,14 @@ private:
 	 *
 	 * @return the points to draw
 	 */
-	static std::vector<GLfloat> get_points();
+	static std::vector<GLfloat> get_points(size_t const size);
 
 	/**
 	 * Return the indices of the points to draw
 	 *
 	 * @return the indices of the points to draw
 	 */
-	static std::vector<GLuint> get_indices();
+	static std::vector<GLuint> get_indices(size_t const size);
 
 	/**
 	 * Return the model-view-projection matrix
