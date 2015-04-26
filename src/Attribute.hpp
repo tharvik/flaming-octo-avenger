@@ -3,9 +3,10 @@
 
 #include "OpenGLValue.hpp"
 
-// TODO put todo in doxygen
+#include <set>
+#include <tuple>
 
-class Attribute : public OpenGLValue {
+class Attribute {
 public:
 
 	/**
@@ -16,19 +17,13 @@ public:
 	 * @param type type wrapped
 	 * @param value value to load into
 	 */
-	template<typename T>
-	Attribute(GLenum const type_buffer, GLenum const type, T const value, std::string const name);
+	Attribute(std::string const name, std::set<std::tuple<GLenum, OpenGLValue>> const values);
 
-	/**
-	 * Type of buffer used in OpenGL
-	 */
-	GLenum const type_buffer;
+	std::string name;
+
+	std::set<std::tuple<GLenum, OpenGLValue>> const values;
+
+	bool operator<(Attribute const & other) const;
 };
-
-// TODO find a way to put it in .cpp
-template<typename T>
-Attribute::Attribute(GLenum const type_buffer, GLenum const type, T const value, std::string const name)
-	: OpenGLValue(name, type, value), type_buffer(type_buffer)
-{}
 
 #endif //FLAMING_OCTO_AVENGER_ATTRIBUTE_H

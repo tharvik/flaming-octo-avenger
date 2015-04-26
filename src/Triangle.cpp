@@ -9,10 +9,12 @@ Triangle::Triangle()
 
 std::set<Attribute> Triangle::get_attributes()
 {
-	std::set<Attribute> attribs;
+	std::set<std::tuple<GLenum, OpenGLValue>> values;
 
-	Attribute attr(GL_ARRAY_BUFFER, GL_FLOAT, get_points(), "vpoint");
-	attribs.insert(attr);
+	values.insert(std::make_pair(GL_ARRAY_BUFFER, OpenGLValue(GL_FLOAT, get_points())));
+
+	std::set<Attribute> attribs;
+	attribs.emplace("vpoint", values);
 
 	return attribs;
 }

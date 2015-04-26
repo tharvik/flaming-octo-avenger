@@ -2,7 +2,7 @@
 
 bool OpenGLValue::operator<(OpenGLValue const & other) const
 {
-	return this->name < other.name;
+	return this->value[0].as_GLuint < other.value[0].as_GLuint;
 }
 
 template<>

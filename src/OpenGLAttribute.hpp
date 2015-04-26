@@ -17,7 +17,7 @@ public:
 	/**
 	 * Where, in OpenGL, are the vertex stored
 	 */
-	GLuint vertex_buffer;
+	std::set<GLuint> vertex_buffers;
 
 	/**
 	 * Location of the Attribute.name inside OpenGL
@@ -38,6 +38,9 @@ public:
 	 */
 	bool operator<(OpenGLAttribute const & other) const;
 
+	/**
+	 * @todo directly use the constructor
+	 */
 	static OpenGLAttribute get_concret(Program const & program, Attribute const & uniform);
 
 	void draw() const;
@@ -60,7 +63,8 @@ private:
 	 *
 	 * @return id of the buffer in OpenGL
 	 */
-	static GLuint get_vertex_buffer(GLenum const type, std::vector<OpenGLValue::element> const & points);
+	//static std::set<GLuint> get_vertex_buffer(std::set<std::tuple<GLenum const type, std::vector<OpenGLValue::element> const & points);
+	static std::set<GLuint> get_vertex_buffers(std::set<std::tuple<GLenum, OpenGLValue>> values);
 
 	/**
 	 * Return the id of the vertex attribute
@@ -72,7 +76,9 @@ private:
 	 *
 	 * @return the id of the vertex attribute
 	 */
-	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, GLuint const vertex_buffer, Program const &program);
+	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, std::set<GLuint> const vertex_buffer, Program const &program);
+
+	static GLsizei get_num_elements(std::set<std::tuple<GLenum, OpenGLValue>> const & values);
 };
 
 

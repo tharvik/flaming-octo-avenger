@@ -3,7 +3,9 @@
 
 #include "OpenGLValue.hpp"
 
-class Uniform : public OpenGLValue {
+#include <set>
+
+class Uniform {
 public:
 
 	/**
@@ -12,14 +14,12 @@ public:
 	 * @param name name used by GLSL
 	 * @param value value to load into
 	 */
-	template<typename T>
-	Uniform(std::string const name, GLenum const type, T const value);
-};
+	Uniform(std::string const name, OpenGLValue const value);
 
-// TODO find a way to put it in .cpp
-template<typename T>
-Uniform::Uniform(std::string const name, GLenum const type, T const value)
-	: OpenGLValue(name, type, value)
-{}
+	std::string const name;
+	OpenGLValue const value;
+
+	bool operator<(Uniform const & other) const;
+};
 
 #endif //FLAMING_OCTO_AVENGER_UNIFORM_H

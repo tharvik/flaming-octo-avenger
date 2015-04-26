@@ -7,10 +7,9 @@
 
 #include <set>
 
-// TODO implement resizing
-
 /**
  * Ensemble of Object; main entry point
+ * @todo implement resizing
  */
 class World {
 public:

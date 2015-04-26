@@ -14,24 +14,26 @@ Plane::Plane(size_t const size)
 
 std::set<Attribute> Plane::get_attributes()
 {
+	std::set<std::tuple<GLenum, OpenGLValue>> values;
+
+	OpenGLValue points(GL_FLOAT, get_points());
+	OpenGLValue indices(GL_UNSIGNED_INT, get_indices());
+
+	values.emplace(GL_ARRAY_BUFFER, points);
+	values.emplace(GL_ELEMENT_ARRAY_BUFFER, indices);
+
 	std::set<Attribute> attribs;
-
-	Attribute vpoint(GL_ARRAY_BUFFER, GL_FLOAT, get_points(), "position");
-	Attribute indices(GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_INT, get_indices(), "position");
-
-	attribs.insert(vpoint);
-	attribs.insert(indices);
+	attribs.emplace("position", values);
 
 	return attribs;
 }
 
 std::set<Uniform> Plane::get_uniformes()
 {
+	OpenGLValue value(GL_DOUBLE_MAT4, get_mvp());
+
 	std::set<Uniform> attribs;
-
-	Uniform mvp("mvp", GL_DOUBLE_MAT4, get_mvp());
-
-	attribs.insert(mvp);
+	attribs.emplace("mvp", value);
 
 	return attribs;
 }

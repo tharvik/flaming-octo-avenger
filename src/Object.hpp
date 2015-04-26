@@ -8,7 +8,7 @@
 #include "OpenGL.hpp"
 #include "Uniform.hpp"
 #include "Attribute.hpp"
-#include "OpenGLUniform.h"
+#include "OpenGLUniform.hpp"
 #include "OpenGLAttribute.hpp"
 
 #include <set>

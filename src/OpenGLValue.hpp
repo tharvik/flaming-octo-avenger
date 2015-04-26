@@ -12,11 +12,6 @@
 class OpenGLValue {
 public:
 	/**
-	 * The name used in GLSL
-	 */
-	std::string const name;
-
-	/**
 	 * OpenGL type contained
 	 */
 	GLenum const type;
@@ -40,12 +35,8 @@ public:
 	 * Allow insertion into a set; based on the name
 	 *
 	 * @param other Attribute to compare to
-	 *
-	 * @return this->name < other.name;
 	 */
 	bool operator<(OpenGLValue const & other) const;
-
-protected:
 
 	/**
 	 * Construct an Attribute with the given name and value
@@ -54,8 +45,7 @@ protected:
 	 * @param value value to load into
 	 */
 	template<typename T>
-	OpenGLValue(std::string const name, GLenum type, T const value);
-
+	OpenGLValue(GLenum type, T const value);
 
 private:
 
@@ -70,10 +60,9 @@ private:
 	static std::vector<element> to_vec(T const value);
 };
 
-// TODO find a way to put it in .cpp
 template<typename T>
-OpenGLValue::OpenGLValue(std::string const name, GLenum type, T const value)
-	: name(name), type(type), value(to_vec<>(value))
+OpenGLValue::OpenGLValue(GLenum type, T const value)
+	: type(type), value(to_vec<>(value))
 {}
 
 #endif

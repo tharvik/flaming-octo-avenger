@@ -7,10 +7,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 
 set(SOURCE_FILES
     src/Attribute.cpp
-    src/Attribute.h
+    src/Attribute.hpp
+    src/main.cpp
+    src/OpenGLAttribute.cpp
+    src/OpenGLAttribute.hpp
     src/OpenGLValue.cpp
     src/OpenGLValue.hpp
-    src/main.cpp
+    src/OpenGLUniform.cpp
+    src/OpenGLUniform.hpp
     src/Object.cpp
     src/Object.hpp
     src/OpenGL.hpp
@@ -20,16 +24,16 @@ set(SOURCE_FILES
     src/Program.hpp
     src/Shader.cpp
     src/Shader.hpp
+    src/Texture.cpp
+    src/Texture.hpp
     src/Triangle.cpp
     src/Triangle.hpp
+    src/Uniform.cpp
+    src/Uniform.hpp
     src/Util.cpp
     src/Util.hpp
     src/World.cpp
-    src/Texture.cpp
-    src/Texture.hpp
-    src/Uniform.cpp
-    src/Uniform.h
     src/World.hpp)
 
-add_executable(flaming_octo_avenger ${SOURCE_FILES} src/OpenGLUniform.cpp src/OpenGLUniform.h src/OpenGLAttribute.cpp src/OpenGLAttribute.h)
+add_executable(flaming_octo_avenger ${SOURCE_FILES})
 target_link_libraries(flaming_octo_avenger ${COMMON_LIBS})

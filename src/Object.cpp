@@ -18,6 +18,9 @@ void Object::set_uniforms(std::set<Uniform> uniforms)
 		this->uniforms.insert(OpenGLUniform::get_concret(this->program, uniform));
 }
 
+/**
+ * @todo delete everything
+ */
 Object::~Object()
 {
 	if (!last_ref())
@@ -25,7 +28,7 @@ Object::~Object()
 
 	for (auto const & attrib : attributes) {
 		glDeleteVertexArrays(1, &attrib.vertex_array);
-		glDeleteBuffers(1, &attrib.vertex_buffer);
+		//glDeleteBuffers(1, &attrib.vertex_buffers);
 	}
 }
 
