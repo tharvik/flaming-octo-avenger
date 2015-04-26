@@ -4,7 +4,6 @@
 #include "Util.hpp"
 
 #include <fstream>
-#include <iostream>
 
 #define shader_base_path "shaders/"
 

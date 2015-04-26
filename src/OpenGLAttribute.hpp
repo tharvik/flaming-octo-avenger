@@ -46,6 +46,8 @@ public:
 	void draw() const;
 
 private:
+	bool const is_indexed;
+
 	OpenGLAttribute(Program const & program, Attribute const & uniform);
 
 	/**
@@ -78,7 +80,9 @@ private:
 	 */
 	static GLuint get_vertex_attrib(std::string name, GLuint const vertex_array, std::set<GLuint> const vertex_buffer, Program const &program);
 
-	static GLsizei get_num_elements(std::set<std::tuple<GLenum, OpenGLValue>> const & values);
+	static bool get_indexed(std::set<std::tuple<GLenum, OpenGLValue>> const & values);
+
+	static GLsizei get_num_elements(bool is_indexed, std::set<std::tuple<GLenum, OpenGLValue>> const & values);
 };
 
 

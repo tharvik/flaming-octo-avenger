@@ -1,7 +1,5 @@
 #include "Object.hpp"
 
-#include <iostream>
-
 Object::Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniforms, std::set<Texture> textures)
 	: program(name),
 	  attributes(get_attribs(program, attributes)),

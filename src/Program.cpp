@@ -2,8 +2,6 @@
 
 #include "Util.hpp"
 
-#include <iostream>
-
 Program::Program(std::string const name)
 	: vshader(name), fshader(name), id(get_program(vshader, fshader))
 {}

@@ -45,3 +45,8 @@ GLenum Texture::get_id()
 
 	return id++;
 }
+
+bool Texture::operator<(Texture const & other) const
+{
+	return this->id < other.id;
+}

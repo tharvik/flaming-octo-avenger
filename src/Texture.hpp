@@ -38,6 +38,8 @@ public:
 	 */
 	GLuint const buffer_id;
 
+	bool operator<(Texture const & other) const;
+
 private:
 	/**
 	 * Load the texture base on the given path and name use by GLSL

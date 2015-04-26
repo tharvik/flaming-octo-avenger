@@ -8,7 +8,7 @@ bool OpenGLAttribute::operator<(OpenGLAttribute const & other) const
 OpenGLAttribute::OpenGLAttribute(Program const &program, Attribute const &attribute)
 	: vertex_array(get_vertex_array(program)), vertex_buffers(get_vertex_buffers(attribute.values)),
 	  id(get_vertex_attrib(attribute.name, this->vertex_array, this->vertex_buffers, program)),
-	  num_elements(get_num_elements(attribute.values))
+	  is_indexed(get_indexed(attribute.values)), num_elements(get_num_elements(is_indexed, attribute.values))
 {}
 
 OpenGLAttribute OpenGLAttribute::get_concret(Program const & program, Attribute const & uniform)
@@ -38,14 +38,20 @@ std::set<GLuint> OpenGLAttribute::get_vertex_buffers(std::set<std::tuple<GLenum,
 	for(auto const & value : values) {
 
 		GLenum const type = std::get<0>(value);
-		std::vector<OpenGLValue::element> const vals = std::get<1>(value).value;
+		OpenGLValue const val = std::get<1>(value);
 
 		GLuint vbo;
 
-		glGenBuffers(1, &vbo);
+		size_t size;
+		switch (val.type) {
+			case GL_FLOAT: size = sizeof(GL_FLOAT); break;
+			case GL_UNSIGNED_INT: size = sizeof(GL_UNSIGNED_INT); break;
+			default: assert(false);
+		}
 
+		glGenBuffers(1, &vbo);
 		glBindBuffer(type, vbo);
-		glBufferData(type, vals.size() * sizeof(vals[0]), vals.data(), GL_STATIC_DRAW);
+		glBufferData(type, val.value.size() * size, val.value.data(), GL_STATIC_DRAW);
 		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		vbos.insert(vbo);
@@ -65,7 +71,6 @@ GLuint OpenGLAttribute::get_vertex_attrib(std::string name, GLuint vao, std::set
 
 	attr = glGetAttribLocation(program.get_id(), name.c_str());
 	glEnableVertexAttribArray(attr);
-
 	glVertexAttribPointer(attr, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -83,32 +88,44 @@ void OpenGLAttribute::draw() const
 	//glEnableVertexAttribArray(this->id);
 	//glBindBuffer(GL_ARRAY_BUFFER, this->vertex_buffer);
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, this->num_elements);
+	if (is_indexed)
+		glDrawElements(GL_TRIANGLES, this->num_elements, GL_UNSIGNED_INT, 0);
+	else
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, this->num_elements);
 
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	//glDisableVertexAttribArray(this->id);
 	//glBindVertexArray(0);
 }
 
-GLsizei OpenGLAttribute::get_num_elements(std::set<std::tuple<GLenum, OpenGLValue>> const & values)
+bool OpenGLAttribute::get_indexed(std::set<std::tuple<GLenum, OpenGLValue>> const & values)
+{
+	for (auto const & value : values) {
+		GLenum type = std::get<0>(value);
+		if (type == GL_ELEMENT_ARRAY_BUFFER)
+			return true;
+	}
+}
+
+GLsizei OpenGLAttribute::get_num_elements(bool is_indexed, std::set<std::tuple<GLenum, OpenGLValue>> const & values)
 {
 	GLsizei size = 0;
-	bool got_element_array = false;
 
 	for (auto const & value : values) {
 
 		GLenum type = std::get<0>(value);
 		OpenGLValue val(std::get<1>(value));
-
 		GLsizei const val_size = val.value.size();
 
-		if (type == GL_ELEMENT_ARRAY_BUFFER) {
-			got_element_array = true;
-			size = val_size;
+		if (is_indexed) {
+			if (type == GL_ELEMENT_ARRAY_BUFFER) {
+				size = val_size;
+			}
+		} else {
+			if (val_size > size) {
+				size = val_size;
+			}
 		}
-
-		if (!got_element_array && val_size > size)
-			size = val_size;
 	}
 
 	return size;

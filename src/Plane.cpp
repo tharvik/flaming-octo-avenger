@@ -3,8 +3,6 @@
 #include "OpenGLValue.hpp"
 #include "Attribute.hpp"
 
-#include <array>
-
 // TODO use size instead of hardcoded grid_res
 
 Plane::Plane(size_t const size)
@@ -50,8 +48,9 @@ std::vector<GLfloat> Plane::get_points()
 		float const offset_x = i * 2 / grid_res;
 		for(float j = - delta; j <= delta; ++j) {
 			float const offset_y = j * 2 / grid_res;
-			vertices.push_back(offset_x);
 			vertices.push_back(offset_y);
+			vertices.push_back(offset_x);
+			vertices.push_back(0);
 		}
 	}
 
@@ -95,11 +94,15 @@ glm::mat4 Plane::get_mvp()
 	return mat;
 }
 
+/**
+ * @todo order matter, it has to change
+ */
 std::set<Texture> Plane::get_texture()
 {
 	std::set<Texture> textures;
 
-	Texture tex("plane.png", "pattern");
+	textures.emplace("pattern.png", "pattern");
+	textures.emplace("plane.png", "tex");
 
 	return textures;
 }

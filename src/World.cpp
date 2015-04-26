@@ -1,12 +1,10 @@
+#include <iostream>
 #include "World.hpp"
 
 #include "Util.hpp"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
-
-#include <cassert>
-#include <iostream>
 
 World::World(std::string const name)
 {

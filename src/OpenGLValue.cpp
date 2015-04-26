@@ -35,8 +35,6 @@ std::vector<OpenGLValue::element> OpenGLValue::to_vec(std::vector<name> const va
 #include "OpenGLValue.x"
 #undef OpenGLValue_macro
 
-#include <iostream>
-
 #define OpenGLValue_macro(name, id)		\
 template<>					\
 std::vector<name> OpenGLValue::as() const	\
