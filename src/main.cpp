@@ -1,6 +1,5 @@
-#include "Plane.hpp"
+#include "Mountain.hpp"
 #include "World.hpp"
-#include "Triangle.hpp"
 
 #include "Util.hpp"
 
@@ -14,9 +13,9 @@ int main()
 	try {
 		World world("flaming-octo-avenger");
 
-		Plane plane;
+		Mountain mountain;
 
-		world.add_object(plane);
+		world.add_object(mountain);
 
 		world.main_loop();
 	} catch (Util::base_exception& e) {

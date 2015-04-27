@@ -15,7 +15,11 @@ public:
 	/**
 	 * Construct a Plane, forward everything to Object
 	 */
-	Plane(size_t const size = 100);
+	Plane(std::string const name,
+	      std::set<Uniform> const uniforms = std::set<Uniform>(),
+	      std::set<Attribute> const attributes = std::set<Attribute>(),
+	      std::set<Texture> const textures = std::set<Texture>(),
+	      size_t const size = 100);
 
 private:
 	size_t const size;
@@ -25,14 +29,9 @@ private:
 	 *
 	 * @return the attributes
 	 */
-	static std::set<Attribute> get_attributes(size_t const size);
-
-	/**
-	 * Return all the uniformes
-	 *
-	 * @return the uniformes
-	 */
-	static std::set<Uniform> get_uniformes();
+	static std::set<Attribute>
+		get_attributes(std::set<Attribute> const attributes,
+			       size_t const size);
 
 	/**
 	 * Return the points to draw
@@ -47,20 +46,6 @@ private:
 	 * @return the indices of the points to draw
 	 */
 	static std::vector<GLuint> get_indices(size_t const size);
-
-	/**
-	 * Return the model-view-projection matrix
-	 *
-	 * @return the model-view-projection matrix
-	 */
-	static glm::mat4 get_mvp();
-
-	/**
-	 * Return all the textures
-	 *
-	 * @return all the textures
-	 */
-	static std::set<Texture> get_texture();
 };
 
 #endif

@@ -6,6 +6,7 @@ uniform sampler2D pattern;
 in vec2 position;
 
 out vec2 uv;
+out vec3 vcolor;
 
 void main() {
     uv = (position + vec2(1.0, 1.0)) * 0.5;
@@ -19,6 +20,7 @@ void main() {
     vec3 pos_3d = vec3(position.x, height, -position.y);
 
     gl_Position = mvp * vec4(pos_3d, 1.0);
+    vcolor = texture(pattern, uv).xyz;
 
     //vcolor = vec3(height,0,0);
     //vcolor = texture(pattern, uv / 4).rgb;

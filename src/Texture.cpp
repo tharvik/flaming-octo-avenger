@@ -9,6 +9,13 @@ Texture::Texture(std::string filename, std::string name)
 	: name(name), id(get_id()), buffer_id(load_texture(id, texture_base_path + filename))
 {}
 
+Texture::Texture(std::string const name, GLuint const id,
+		 GLuint const buffer_id)
+	: name(name), id(id), buffer_id(buffer_id)
+{
+	get_id();
+}
+
 GLuint Texture::load_texture(GLenum id, std::string path)
 {
 	GLuint tex;
@@ -41,7 +48,7 @@ GLuint Texture::load_texture(GLenum id, std::string path)
 
 GLenum Texture::get_id()
 {
-	static GLuint id;
+	static GLuint id = 0;
 
 	return id++;
 }

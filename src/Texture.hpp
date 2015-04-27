@@ -33,14 +33,24 @@ public:
 	 */
 	GLuint const id;
 
+	bool operator<(Texture const & other) const;
+
+	Texture(std::string const name, GLuint const id,
+		GLuint const buffer_id);
+
+	/**
+	 * Return a new unique id for the texture
+	 *
+	 * @return a new unique id for the texture
+	 */
+	static GLenum get_id();
+
+private:
 	/**
 	 * The buffer created with OpenGL
 	 */
 	GLuint const buffer_id;
 
-	bool operator<(Texture const & other) const;
-
-private:
 	/**
 	 * Load the texture base on the given path and name use by GLSL
 	 *
@@ -50,13 +60,6 @@ private:
 	 * @return the id of the buffer of the loaded texture
 	 */
 	static GLuint load_texture(GLenum id, std::string path);
-
-	/**
-	 * Return a new unique id for the texture
-	 *
-	 * @return a new unique id for the texture
-	 */
-	static GLenum get_id();
 };
 
 #endif //FLAMING_OCTO_AVENGER_TEXTURE_H

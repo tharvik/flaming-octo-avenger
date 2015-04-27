@@ -1,14 +1,23 @@
 #include "Plane.hpp"
 
-#include "OpenGLValue.hpp"
 #include "Attribute.hpp"
+#include "OpenGLValue.hpp"
+#include "PerlinNoise.hpp"
 
-Plane::Plane(size_t const size)
-	: Object("plane", get_attributes(size), get_uniformes(), get_texture()), size(size)
-{
-}
+Plane::Plane(std::string const name,
+	     std::set<Uniform> const uniforms,
+	     std::set<Attribute> const attributes,
+	     std::set<Texture> const textures,
+	     size_t const size)
+	: Object(name,
+		 get_attributes(attributes, size),
+		 uniforms,
+		 textures),
+	  size(size)
+{}
 
-std::set<Attribute> Plane::get_attributes(size_t const size)
+std::set<Attribute> Plane::get_attributes(std::set<Attribute> const attributes,
+					  size_t const size)
 {
 	std::set<std::tuple<GLenum, OpenGLValue>> values;
 
@@ -19,17 +28,8 @@ std::set<Attribute> Plane::get_attributes(size_t const size)
 	values.emplace(GL_ELEMENT_ARRAY_BUFFER, indices);
 
 	std::set<Attribute> attribs;
+	attribs.insert(attributes.begin(), attributes.end());
 	attribs.emplace("position", values);
-
-	return attribs;
-}
-
-std::set<Uniform> Plane::get_uniformes()
-{
-	OpenGLValue value(GL_DOUBLE_MAT4, get_mvp());
-
-	std::set<Uniform> attribs;
-	attribs.emplace("mvp", value);
 
 	return attribs;
 }
@@ -74,31 +74,4 @@ std::vector<GLuint> Plane::get_indices(size_t const size)
 	}
 
 	return indices;
-}
-
-glm::mat4 Plane::get_mvp()
-{
-	glm::mat4 mat;
-
-	mat[0] = { 0.970836,	0, -0.485418,         0};
-	mat[1] = {-0.182574,	0.912871, -0.365148, -0.228218};
-	mat[2] = {-0.0408248,  -0.0408248,-0.0816497,  0.500104};
-	mat[3] = { 0,		0,         0,         1};
-
-	mat = glm::transpose(mat);
-
-	return mat;
-}
-
-/**
- * @todo order matter, it has to change
- */
-std::set<Texture> Plane::get_texture()
-{
-	std::set<Texture> textures;
-
-	textures.emplace("plane.png", "tex");
-	textures.emplace("pattern.png", "pattern");
-
-	return textures;
 }
