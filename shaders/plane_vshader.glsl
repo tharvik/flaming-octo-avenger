@@ -46,13 +46,13 @@ void main() {
 	vec3 normal = get_normal(uv);
 	float aver = dot(light, normal);
 
-	if (height > 0.8)
+	if (height > 0.6)
 		vcolor = vec3(1,1,1);
-	else if (height > 0.5)
+	else if (height > 0.3)
 		vcolor = vec3(0,1,0);
 	else
-		vcolor = vec3(1,0.5,0);
+		vcolor = vec3(106/255.,49/255.,0);
 
-	vcolor = normalize(vcolor);
+	//vcolor = normalize(vcolor);
 	vcolor = mix(vcolor, vec3(0,0,0), aver);
 }
