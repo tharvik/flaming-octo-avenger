@@ -5,22 +5,24 @@
 
 #define texture_base_path "textures/"
 
-Texture::Texture(std::string filename, std::string name)
-	: name(name), id(get_id()), buffer_id(load_texture(id, texture_base_path + filename))
+Texture::Texture(std::string filename, std::string name, bool const gl_repeat)
+	: name(name), id(get_id()),
+	  buffer_id(load_texture(id, texture_base_path + filename, gl_repeat))
 {}
 
-Texture::Texture(std::string name, std::vector<uint32_t> data)
-	: name(name), id(get_id()), buffer_id(load_texture(id, data))
+Texture::Texture(std::string name, std::vector<uint32_t> data,
+		 bool const gl_repeat)
+	: name(name), id(get_id()), buffer_id(load_texture(id, data, gl_repeat))
 {}
 
 Texture::Texture(std::string const name, GLuint const id,
 		 GLuint const buffer_id)
 	: name(name), id(id), buffer_id(buffer_id)
 {
-	get_id();
+	get_id(); // drop an id
 }
 
-GLuint Texture::load_texture(GLenum id, std::string path)
+GLuint Texture::load_texture(GLenum id, std::string path, bool const gl_repeat)
 {
 	png_image image;
 	memset(&image, 0, (sizeof image));
@@ -50,10 +52,11 @@ GLuint Texture::load_texture(GLenum id, std::string path)
 		data.push_back(elem);
 	}
 
-	return load_texture(id, data);
+	return load_texture(id, data, gl_repeat);
 }
 
-GLuint Texture::load_texture(GLenum id, std::vector<uint32_t> data)
+GLuint Texture::load_texture(GLenum id, std::vector<uint32_t> data,
+			     bool const gl_repeat)
 {
 	GLuint tex;
 
@@ -63,8 +66,15 @@ GLuint Texture::load_texture(GLenum id, std::vector<uint32_t> data)
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, border, border, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	if (gl_repeat) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	}
 
 	return tex;
 }

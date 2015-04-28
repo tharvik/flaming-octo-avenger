@@ -44,8 +44,11 @@ std::set<Texture> Mountain::get_texture(size_t const size)
 
 	PerlinNoise pattern(size);
 
-	textures.emplace("plane.png", "tex");
 	textures.insert(pattern.get_texture("pattern"));
+	textures.emplace("grass.png", "grass");
+	textures.emplace("rock.png", "rock");
+	textures.emplace("sand.png", "sand");
+	textures.emplace("snow.png", "snow");
 
 	return textures;
 }

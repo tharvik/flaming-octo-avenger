@@ -5,13 +5,13 @@ uniform sampler2D pattern;
 
 in vec2 position;
 
+out vec3 normal;
 out vec2 uv;
-out vec3 vcolor;
+out float height;
 
 vec3 get_normal(vec2 uv) {
 	float height = texture(pattern, uv).x;
 	float step = 1 / 512.f;
-
 
 	//calculate the neigbour positions
 	vec4 prev_x = vec4(uv.x, 0.0, uv.y, 1.0);
@@ -38,21 +38,9 @@ vec3 get_normal(vec2 uv) {
 void main() {
 	uv = (position + vec2(1.0, 1.0)) * 0.5;
 
-	float height = texture(pattern, uv).x;
+	height = texture(pattern, uv).x;
 	vec3 pos_3d = vec3(position.x, height, -position.y);
 	gl_Position = mvp * vec4(pos_3d, 1.0);
 
-	vec3 light = normalize(vec3(1,1,1));
-	vec3 normal = get_normal(uv);
-	float aver = dot(light, normal);
-
-	if (height > 0.6)
-		vcolor = vec3(1,1,1);
-	else if (height > 0.3)
-		vcolor = vec3(0,1,0);
-	else
-		vcolor = vec3(106/255.,49/255.,0);
-
-	//vcolor = normalize(vcolor);
-	vcolor = mix(vcolor, vec3(0,0,0), aver);
+	normal = get_normal(uv);
 }

@@ -9,6 +9,7 @@
 
 /**
  * @todo remove deps on libnoise
+ * @todo use Fractional Brownian motion
  */
 PerlinNoise::PerlinNoise(size_t const size)
 	: framebuffer(size)

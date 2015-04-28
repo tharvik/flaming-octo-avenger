@@ -23,9 +23,11 @@ public:
 	 * @param filename name of the file to load
 	 * @param glsl_name name used in the Shader
 	 */
-	Texture(std::string filename, std::string glsl_name);
+	Texture(std::string filename, std::string glsl_name,
+		bool const gl_repeat = false);
 
-	Texture(std::string glsl_name, std::vector<uint32_t> data);
+	Texture(std::string glsl_name, std::vector<uint32_t> data,
+		bool const gl_repeat = false);
 
 	Texture(std::string const name, GLuint const id,
 		GLuint const buffer_id);
@@ -63,9 +65,11 @@ private:
 	 *
 	 * @return the id of the buffer of the loaded texture
 	 */
-	static GLuint load_texture(GLenum id, std::string path);
+	static GLuint load_texture(GLenum id, std::string path,
+				   bool const gl_repeat);
 
-	static GLuint load_texture(GLenum id, std::vector<uint32_t> data);
+	static GLuint load_texture(GLenum id, std::vector<uint32_t> data,
+				   bool const gl_repeat);
 };
 
 #endif //FLAMING_OCTO_AVENGER_TEXTURE_H
