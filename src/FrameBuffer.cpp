@@ -3,11 +3,11 @@
 #include "Texture.hpp"
 #include "Util.hpp"
 
-FrameBuffer::FrameBuffer(size_t const width, size_t const height)
-	: width(width), height(height),
+FrameBuffer::FrameBuffer(size_t const size)
+	: size(size),
 	  color_attachement(get_color_attachement()),
-	  texture(get_texture(width, height)),
-	  render_buffer(get_render_buffer(width, height)),
+	  texture(get_texture(size)),
+	  render_buffer(get_render_buffer(size)),
 	  id(get_id(color_attachement, texture, render_buffer))
 {}
 
@@ -18,7 +18,7 @@ GLenum FrameBuffer::get_color_attachement()
 	return color_attachement++;
 }
 
-GLuint FrameBuffer::get_texture(size_t const width, size_t const height)
+GLuint FrameBuffer::get_texture(size_t const size)
 {
 	GLuint texture;
 
@@ -31,7 +31,7 @@ GLuint FrameBuffer::get_texture(size_t const width, size_t const height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size, size, 0, GL_RGB,
 		     GL_UNSIGNED_BYTE, NULL);
 
 	Util::assert_no_glError();
@@ -39,7 +39,7 @@ GLuint FrameBuffer::get_texture(size_t const width, size_t const height)
 	return texture;
 }
 
-GLuint FrameBuffer::get_render_buffer(size_t const width, size_t const height)
+GLuint FrameBuffer::get_render_buffer(size_t const size)
 {
 	GLuint render_buffer;
 
@@ -47,7 +47,7 @@ GLuint FrameBuffer::get_render_buffer(size_t const width, size_t const height)
 	glBindRenderbuffer(GL_RENDERBUFFER, render_buffer);
 
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32,
-			      width, height);
+			      size, size);
 
 	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
@@ -78,7 +78,7 @@ GLuint FrameBuffer::get_id(GLenum color_attachement, GLuint texture,
 
 void FrameBuffer::bind() const
 {
-	glViewport(0, 0, this->width, this->height);
+	glViewport(0, 0, this->size, this->size);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, this->id);
 

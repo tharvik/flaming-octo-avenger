@@ -7,7 +7,7 @@
 
 class PerlinNoise {
 	public:
-		PerlinNoise();
+		PerlinNoise(size_t const size = 100);
 
 		Texture get_texture(std::string const name) const;
 

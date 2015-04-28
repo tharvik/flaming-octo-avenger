@@ -9,6 +9,10 @@ Texture::Texture(std::string filename, std::string name)
 	: name(name), id(get_id()), buffer_id(load_texture(id, texture_base_path + filename))
 {}
 
+Texture::Texture(std::string name, std::vector<uint32_t> data)
+	: name(name), id(get_id()), buffer_id(load_texture(id, data))
+{}
+
 Texture::Texture(std::string const name, GLuint const id,
 		 GLuint const buffer_id)
 	: name(name), id(id), buffer_id(buffer_id)
@@ -18,8 +22,6 @@ Texture::Texture(std::string const name, GLuint const id,
 
 GLuint Texture::load_texture(GLenum id, std::string path)
 {
-	GLuint tex;
-
 	png_image image;
 	memset(&image, 0, (sizeof image));
 	image.version = PNG_IMAGE_VERSION;
@@ -36,10 +38,31 @@ GLuint Texture::load_texture(GLenum id, std::string path)
 		throw std::string("pngtopng: error: ") + image.message;
 	}
 
+	size_t const size = image.width * image.height;
+
+	std::vector<uint32_t> data;
+	data.reserve(size);
+	for (size_t i = 0; i < size * 4; i += 4) {
+		uint32_t elem = 0;
+		for (int j = 3; j >= 0; --j)
+			elem = (elem << 8) | buffer[i + j];
+
+		data.push_back(elem);
+	}
+
+	return load_texture(id, data);
+}
+
+GLuint Texture::load_texture(GLenum id, std::vector<uint32_t> data)
+{
+	GLuint tex;
+
+	size_t const border = sqrt(data.size());
+
 	glActiveTexture(id + GL_TEXTURE0);
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, border, border, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 

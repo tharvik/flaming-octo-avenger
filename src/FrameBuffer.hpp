@@ -6,15 +6,13 @@
 class FrameBuffer {
 
 	public:
-		FrameBuffer(size_t const width = 100,
-			    size_t const height = 100);
+		FrameBuffer(size_t const size = 100);
 
 		void bind() const;
 		void unbind() const;
 
 	private:
-		size_t const width;
-		size_t const height;
+		size_t const size;
 
 	public:
 		GLuint const color_attachement;
@@ -28,10 +26,8 @@ class FrameBuffer {
 	private:
 
 		static GLenum get_color_attachement();
-		static GLuint get_texture(size_t const width,
-					  size_t const height);
-		static GLuint get_render_buffer(size_t const width,
-						size_t const height);
+		static GLuint get_texture(size_t const size);
+		static GLuint get_render_buffer(size_t const size);
 		static GLuint get_id(GLenum const color_attachement,
 				     GLuint const tex,
 				     GLuint const render_buffer);

@@ -7,7 +7,9 @@ class Texture;
 
 #include "OpenGL.hpp"
 
+#include <cstdint>
 #include <string>
+#include <vector>
 
 /**
  * A Texture is an image to load and to display to OpenGL
@@ -23,6 +25,11 @@ public:
 	 */
 	Texture(std::string filename, std::string glsl_name);
 
+	Texture(std::string glsl_name, std::vector<uint32_t> data);
+
+	Texture(std::string const name, GLuint const id,
+		GLuint const buffer_id);
+
 	/**
 	 * The name used in GLSL
 	 */
@@ -34,9 +41,6 @@ public:
 	GLuint const id;
 
 	bool operator<(Texture const & other) const;
-
-	Texture(std::string const name, GLuint const id,
-		GLuint const buffer_id);
 
 	/**
 	 * Return a new unique id for the texture
@@ -60,6 +64,8 @@ private:
 	 * @return the id of the buffer of the loaded texture
 	 */
 	static GLuint load_texture(GLenum id, std::string path);
+
+	static GLuint load_texture(GLenum id, std::vector<uint32_t> data);
 };
 
 #endif //FLAMING_OCTO_AVENGER_TEXTURE_H
