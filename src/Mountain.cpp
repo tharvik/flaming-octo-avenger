@@ -5,7 +5,8 @@
 #include "PerlinNoise.hpp"
 
 Mountain::Mountain(size_t const size)
-	: Plane("plane", get_uniformes(), std::set<Attribute>(), get_texture()),
+	: Plane("plane", get_uniformes(), std::set<Attribute>(),
+		get_texture(size)),
 	  size(size)
 {
 }
@@ -37,11 +38,11 @@ glm::mat4 Mountain::get_mvp()
 /**
  * @todo order matter, it has to change
  */
-std::set<Texture> Mountain::get_texture()
+std::set<Texture> Mountain::get_texture(size_t const size)
 {
 	std::set<Texture> textures;
 
-	PerlinNoise pattern;
+	PerlinNoise pattern(size);
 
 	textures.emplace("plane.png", "tex");
 	textures.insert(pattern.get_texture("pattern"));

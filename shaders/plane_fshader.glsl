@@ -8,5 +8,6 @@ in vec3 vcolor;
 out vec3 color;
 
 void main() {
-    color = texture(tex, uv).rgb;
+    //color = texture(tex, uv).rgb;
+    color = vcolor;
 }

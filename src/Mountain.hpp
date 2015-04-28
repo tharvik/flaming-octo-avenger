@@ -15,7 +15,7 @@ public:
 	/**
 	 * Construct a Plane, forward everything to Object
 	 */
-	Mountain(size_t const size = 100);
+	Mountain(size_t const size = 512);
 
 private:
 	size_t const size;
@@ -39,7 +39,7 @@ private:
 	 *
 	 * @return all the textures
 	 */
-	static std::set<Texture> get_texture();
+	static std::set<Texture> get_texture(size_t const size);
 };
 
 #endif
