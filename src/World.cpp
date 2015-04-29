@@ -6,6 +6,13 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+#define PI 3.141592
+
+World *World::world;
+
+World::World()
+{}
+
 World::World(std::string const name)
 {
 	glfwSetErrorCallback(error_callback);
@@ -35,7 +42,12 @@ World::World(std::string const name)
 
 	glClearColor(0.9, 0.9, 0.9, 1);
 
+	glm::quat quat(0.6, -0.3, 0.4, -0.1);
+	this->mvp = quat;
+
 	Util::assert_no_glError();
+
+	world = this;
 }
 
 World::~World() {
@@ -45,8 +57,51 @@ World::~World() {
 void World::key_callback(GLFWwindow* window,
 			int key, int /*scancode*/, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS && mods == 0)
-	    glfwSetWindowShouldClose(window, GL_TRUE);
+	if (action != GLFW_PRESS || mods != 0)
+		return;
+
+	glm::quat & mvp = world->mvp;
+
+	glm::quat w_unit = glm::quat(0.1,0,0,0);
+	glm::quat roll_unit = glm::quat(0,0.1,0,0);
+	glm::quat pitch_unit = glm::quat(0,0,0.1,0);
+	glm::quat yaw_unit = glm::quat(0,0,0,0.1);
+
+	switch (key) {
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
+
+		case GLFW_KEY_LEFT:
+			mvp += roll_unit;
+			break;
+		case GLFW_KEY_RIGHT:
+			mvp += -roll_unit;
+			break;
+
+		case GLFW_KEY_UP:
+			mvp += pitch_unit;
+			break;
+		case GLFW_KEY_DOWN:
+			mvp += -pitch_unit;
+			break;
+
+		case GLFW_KEY_A:
+			mvp += yaw_unit;
+			break;
+		case GLFW_KEY_D:
+			mvp += -yaw_unit;
+			break;
+
+		case GLFW_KEY_W:
+			mvp += w_unit;
+			break;
+		case GLFW_KEY_S:
+			mvp += -w_unit;
+			break;
+	}
+
+	world->update_objects();
 }
 
 void World::error_callback(int error, const char* description)
@@ -56,7 +111,21 @@ void World::error_callback(int error, const char* description)
 
 void World::add_object(Object obj)
 {
+	OpenGLValue value(GL_FLOAT, glm::mat4_cast(mvp));
+	Uniform uniform("mvp", value);
+
+	obj.add_uniform(uniform);
+
 	this->objects.insert(obj);
+}
+
+void World::update_objects()
+{
+	OpenGLValue value(GL_FLOAT, glm::mat4_cast(this->mvp));
+	Uniform uniform("mvp", value);
+
+	for (auto object : this->objects)
+		object.add_uniform(uniform);
 }
 
 void World::main_loop()

@@ -107,6 +107,8 @@ bool OpenGLAttribute::get_indexed(std::set<std::tuple<GLenum, OpenGLValue>> cons
 		if (type == GL_ELEMENT_ARRAY_BUFFER)
 			return true;
 	}
+
+	return false;
 }
 
 GLsizei OpenGLAttribute::get_num_elements(bool is_indexed, std::set<std::tuple<GLenum, OpenGLValue>> const & values)

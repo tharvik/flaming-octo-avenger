@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <png.h>
+#include <cmath>
 
 #define texture_base_path "textures/"
 

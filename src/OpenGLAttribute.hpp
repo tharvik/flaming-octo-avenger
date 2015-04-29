@@ -24,6 +24,11 @@ public:
 	 */
 	GLuint id;
 
+private:
+	bool const is_indexed;
+
+public:
+
 	/**
 	 * Number of elements in the vertex_buffer
 	 */
@@ -46,8 +51,6 @@ public:
 	void draw() const;
 
 private:
-	bool const is_indexed;
-
 	OpenGLAttribute(Program const & program, Attribute const & uniform);
 
 	/**

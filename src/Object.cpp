@@ -13,7 +13,14 @@ void Object::set_uniforms(std::set<Uniform> uniforms)
 	this->uniforms.clear();
 
 	for (auto const & uniform : uniforms)
-		this->uniforms.insert(OpenGLUniform::get_concret(this->program, uniform));
+		add_uniform(uniform);
+}
+
+OpenGLUniform Object::add_uniform(Uniform const & uniform)
+{
+	auto pair = this->uniforms.emplace(this->program, uniform);
+
+	return *pair.first;
 }
 
 /**

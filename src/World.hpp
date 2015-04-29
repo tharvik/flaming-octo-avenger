@@ -5,6 +5,7 @@
 
 #include "OpenGL.hpp"
 
+#include <memory>
 #include <set>
 
 /**
@@ -48,6 +49,11 @@ private:
 	 */
 	GLFWwindow *window;
 
+	glm::quat mvp;
+
+	World();
+	static World *world;
+
 	/**
 	 * Draw all the Objects
 	 */
@@ -73,6 +79,7 @@ private:
 	 */
 	static void error_callback(int error, const char* description);
 
+	void update_objects();
 };
 
 #endif

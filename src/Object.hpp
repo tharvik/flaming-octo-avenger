@@ -29,7 +29,10 @@ public:
 	 * @param uniformes set of uniforme
 	 * @param textures set of Texture
 	 */
-	Object(std::string const name, std::set<Attribute> attributes, std::set<Uniform> uniformes, std::set<Texture> textures);
+	Object(std::string const name,
+	       std::set<Attribute> attributes = std::set<Attribute>(),
+	       std::set<Uniform> uniformes = std::set<Uniform>(),
+	       std::set<Texture> textures = std::set<Texture>());
 
 	/**
 	 * Destructor; need to delete the allocated buffers
@@ -61,6 +64,10 @@ private:
 	 */
 	std::set<OpenGLUniform> uniforms;
 
+public:
+	OpenGLUniform add_uniform(Uniform const & uniform);
+
+private:
 	void set_uniforms(std::set<Uniform> uniforms);
 
 	/**

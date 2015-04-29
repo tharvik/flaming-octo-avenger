@@ -4,7 +4,7 @@
 #include <array>
 
 Triangle::Triangle()
-	: Object("triangle", get_attributes(), std::set<Uniform>(), std::set<Texture>())
+	: Object("triangle", get_attributes())
 {}
 
 std::set<Attribute> Triangle::get_attributes()
