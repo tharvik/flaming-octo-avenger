@@ -44,18 +44,8 @@ find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIRS})
 link_directories(${OpenGL_LIBRARY_DIRS})
 add_definitions(${OpenGL_DEFINITIONS})
-if(NOT OPENGL_FOUND) 
+if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
-endif()
-
-#--- On UNIX|APPLE you can do "make update_opengp" to update
-if(CMAKE_HOST_UNIX)
-    add_custom_target( update_opengp
-        COMMAND rm -rf OpenGP
-        COMMAND svn checkout https://github.com/OpenGP/OpenGP/trunk/src/OpenGP
-        COMMAND rm -rf OpenGP/.svn
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/OpenGP/include
-        COMMENT "Updating OpenGP ${CMAKE_SOURCE_DIR}")
 endif()
 
 #--- Make headers in common directory visible in the IDE
@@ -64,5 +54,4 @@ add_custom_target(common_headers SOURCES ${COMMON_DIR_HEADERS})
 
 #--- Common headers/libraries for all the exercises
 include_directories(${CMAKE_CURRENT_LIST_DIR})
-SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} png)
-
+SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} png noise)

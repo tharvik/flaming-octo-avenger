@@ -8,9 +8,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 set(SOURCE_FILES
     src/Attribute.cpp
     src/Attribute.hpp
+    src/FrameBuffer.cpp
+    src/FrameBuffer.hpp
     src/main.cpp
+    src/Mountain.cpp
+    src/Mountain.hpp
     src/OpenGLAttribute.cpp
     src/OpenGLAttribute.hpp
+    src/OpenGLTexture.cpp
+    src/OpenGLTexture.hpp
     src/OpenGLValue.cpp
     src/OpenGLValue.hpp
     src/OpenGLUniform.cpp
@@ -20,10 +26,14 @@ set(SOURCE_FILES
     src/OpenGL.hpp
     src/Plane.cpp
     src/Plane.hpp
+    src/PerlinNoise.cpp
+    src/PerlinNoise.hpp
     src/Program.cpp
     src/Program.hpp
     src/Shader.cpp
     src/Shader.hpp
+    src/Skybox.cpp
+    src/Skybox.hpp
     src/Texture.cpp
     src/Texture.hpp
     src/Triangle.cpp
