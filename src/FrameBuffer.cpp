@@ -2,6 +2,7 @@
 
 #include "Texture.hpp"
 #include "Util.hpp"
+#include "World.hpp"
 
 FrameBuffer::FrameBuffer(size_t const size)
 	: size(size),
@@ -94,7 +95,7 @@ void FrameBuffer::unbind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glViewport(0, 0, 1920, 1080);
+	glViewport(0, 0, World::world->width, World::world->height);
 
 	Util::assert_no_glError();
 }

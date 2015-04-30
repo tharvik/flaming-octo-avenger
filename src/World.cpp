@@ -45,6 +45,8 @@ World::World(std::string const name)
 	glm::quat quat(0.6, -0.4, 0.2, -0.1);
 	this->mvp = quat;
 
+	glfwGetWindowSize(window, &this->width, &this->height);
+
 	Util::assert_no_glError();
 
 	world = this;
@@ -109,20 +111,30 @@ void World::error_callback(int error, const char* description)
 	std::cerr << error << ":" << description << std::endl;
 }
 
-void World::add_object(Object obj)
+void World::window_size_callback(GLFWwindow* window, int width, int height)
+{
+	world->width = width;
+	world->height = height;
+}
+
+Uniform World::get_mvp() const
 {
 	OpenGLValue value(GL_FLOAT, glm::mat4_cast(mvp));
 	Uniform uniform("mvp", value);
 
-	obj.add_uniform(uniform);
+	return uniform;
+}
+
+void World::add_object(Object obj)
+{
+	obj.add_uniform(get_mvp());
 
 	this->objects.insert(obj);
 }
 
 void World::update_objects()
 {
-	OpenGLValue value(GL_FLOAT, glm::mat4_cast(this->mvp));
-	Uniform uniform("mvp", value);
+	Uniform uniform = get_mvp();
 
 	for (auto object : this->objects)
 		object.add_uniform(uniform);

@@ -38,6 +38,13 @@ public:
 	 */
 	void main_loop();
 
+	static World *world;
+
+	/**
+	 * @todo better to send it to the framebuffers
+	 */
+	int height;
+	int width;
 private:
 	/**
 	 * Set of Object to draw
@@ -52,7 +59,6 @@ private:
 	glm::quat mvp;
 
 	World();
-	static World *world;
 
 	/**
 	 * Draw all the Objects
@@ -79,7 +85,11 @@ private:
 	 */
 	static void error_callback(int error, const char* description);
 
+	void window_size_callback(GLFWwindow* window, int width, int height);
+
 	void update_objects();
+
+	Uniform get_mvp() const;
 };
 
 #endif
