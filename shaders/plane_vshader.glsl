@@ -35,9 +35,6 @@ vec3 get_normal(vec2 uv) {
 	return normal;
 }
 
-/**
- * @todo using correct space
- */
 void main() {
 	uv = (position + vec2(1.0, 1.0)) * 0.5;
 

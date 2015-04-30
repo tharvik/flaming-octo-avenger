@@ -6,8 +6,6 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
-#define PI 3.141592
-
 World *World::world;
 
 World::World()
@@ -42,8 +40,14 @@ World::World(std::string const name)
 
 	glClearColor(0.9, 0.9, 0.9, 1);
 
-	glm::quat quat(0.6, -0.4, 0.2, -0.1);
-	this->mvp = quat;
+	glm::mat4 mat;
+
+	mat[0] = { 0.970836,    0, -0.485418,         0};
+	mat[1] = {-0.182574,    0.912871, -0.365148, -0.228218};
+	mat[2] = {-0.0408248,  -0.0408248,-0.0816497,  0.500104};
+	mat[3] = { 0,           0,         0,         1};
+
+	this->mvp = mat;
 
 	glfwGetWindowSize(window, &this->width, &this->height);
 
@@ -59,15 +63,20 @@ World::~World() {
 void World::key_callback(GLFWwindow* window,
 			int key, int /*scancode*/, int action, int mods)
 {
-	if (action != GLFW_PRESS || mods != 0)
+	if (action == GLFW_RELEASE || mods != 0)
 		return;
 
-	glm::quat & mvp = world->mvp;
+	glm::mat4 & mvp = world->mvp;
 
-	glm::quat w_unit = glm::quat(0.1,0,0,0);
-	glm::quat roll_unit = glm::quat(0,0.1,0,0);
-	glm::quat pitch_unit = glm::quat(0,0,0.1,0);
-	glm::quat yaw_unit = glm::quat(0,0,0,0.1);
+	float const angle = 0.01;
+	float const scale = 1;
+
+	glm::mat4 x_plus = glm::rotate(angle, glm::vec3(1, 0, 0));
+	glm::mat4 y_plus = glm::rotate(angle, glm::vec3(0, 1, 0));
+	glm::mat4 z_plus = glm::rotate(angle, glm::vec3(0, 0, 1));
+	glm::mat4 x_minus = glm::rotate(-angle, glm::vec3(1, 0, 0));
+	glm::mat4 y_minus = glm::rotate(-angle, glm::vec3(0, 1, 0));
+	glm::mat4 z_minus = glm::rotate(-angle, glm::vec3(0, 0, 1));
 
 	switch (key) {
 		case GLFW_KEY_ESCAPE:
@@ -75,33 +84,38 @@ void World::key_callback(GLFWwindow* window,
 			break;
 
 		case GLFW_KEY_LEFT:
-			mvp += roll_unit;
+			mvp = x_plus * mvp;
 			break;
 		case GLFW_KEY_RIGHT:
-			mvp += -roll_unit;
+			mvp = x_minus * mvp;
 			break;
 
 		case GLFW_KEY_UP:
-			mvp += pitch_unit;
+			mvp = y_plus * mvp;
 			break;
 		case GLFW_KEY_DOWN:
-			mvp += -pitch_unit;
+			mvp = y_minus * mvp;
 			break;
 
 		case GLFW_KEY_A:
-			mvp += yaw_unit;
+			mvp = z_plus * mvp;
 			break;
 		case GLFW_KEY_D:
-			mvp += -yaw_unit;
+			mvp = z_minus * mvp;
 			break;
 
 		case GLFW_KEY_W:
-			mvp += w_unit;
+			mvp *= scale;
 			break;
 		case GLFW_KEY_S:
-			mvp += -w_unit;
+			mvp /= scale;
 			break;
 	}
+
+	/*std::cout << mvp.w << '\t'
+		  << mvp.x << '\t'
+		  << mvp.y << '\t'
+		  << mvp.z << std::endl;*/
 
 	world->update_objects();
 }
@@ -119,7 +133,7 @@ void World::window_size_callback(GLFWwindow* window, int width, int height)
 
 Uniform World::get_mvp() const
 {
-	OpenGLValue value(GL_FLOAT, glm::mat4_cast(mvp));
+	OpenGLValue value(GL_FLOAT, mvp);
 	Uniform uniform("mvp", value);
 
 	return uniform;

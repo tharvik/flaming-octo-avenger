@@ -25,7 +25,7 @@ float alpha1()
 {
 	float res = dot(ground, normal);
 
-	return min_max(0, min_rock, res) * (1 + sqrt(5)) / 2;
+	return min_max(1 - min_rock, 1, res);
 }
 
 float alpha2()
@@ -42,7 +42,7 @@ float alpha3()
 
 float alpha4()
 {
-	return min_max(0.04, 0.1, height) * 1.5;
+	return min_max(0.4, 0.8, height) * 3;
 }
 
 void main()

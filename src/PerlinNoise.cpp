@@ -23,17 +23,27 @@ PerlinNoise::PerlinNoise(size_t const size)
 
 	noise::module::Perlin myModule;
 
-	double const x_base = 0.5;
+	/*double const x_base = 0.5;
 	double const y_base = 0.1;
 	double const x_end = 1.6;
 	double const y_end = 1.1;
-	double const ground = 0.5;
+	double const ground = 0.5;*/
+
+	double const x_base = 1.5;
+	double const y_base = 1.1;
+	double const x_end = 10.6;
+	double const y_end = 10.1;
+	double const ground = 1.5;
 
 	for (double x = x_base; x < x_end; x += (x_end - x_base) / size) {
 		for (double y = y_base; y < y_end; y += (y_end - y_base) / size) {
-			double value = myModule.GetValue(x, ground, y);
+			double value = myModule.GetValue(x, ground, y) / 9;
+			value += 0.11;
 			if (value < 0)
 				value = 0;
+
+			value = 6 * std::pow(value, 5) - 15 * std::pow(value, 4) + 10 * std::pow(value, 3);
+
 			data.push_back(value * 0xFF);
 		}
 	}

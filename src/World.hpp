@@ -56,7 +56,7 @@ private:
 	 */
 	GLFWwindow *window;
 
-	glm::quat mvp;
+	glm::mat4 mvp;
 
 	World();
 
