@@ -42,7 +42,7 @@ World::World(std::string const name)
 
 	glClearColor(0.9, 0.9, 0.9, 1);
 
-	glm::quat quat(0.6, -0.3, 0.4, -0.1);
+	glm::quat quat(0.6, -0.4, 0.2, -0.1);
 	this->mvp = quat;
 
 	Util::assert_no_glError();

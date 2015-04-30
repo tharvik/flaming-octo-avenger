@@ -94,7 +94,7 @@ void FrameBuffer::unbind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glViewport(0, 0, 500, 500);
+	glViewport(0, 0, 1920, 1080);
 
 	Util::assert_no_glError();
 }
