@@ -5,7 +5,7 @@
 #include "PerlinNoise.hpp"
 
 Mountain::Mountain(size_t const size)
-	: Plane("plane", std::set<Uniform>(), std::set<Attribute>(),
+	: Plane("mountain", std::set<Uniform>(), std::set<Attribute>(),
 		get_texture(size)),
 	  size(size)
 {}
