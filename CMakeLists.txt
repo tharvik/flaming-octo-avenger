@@ -32,8 +32,6 @@ set(SOURCE_FILES
     src/Program.hpp
     src/Shader.cpp
     src/Shader.hpp
-    src/Skybox.cpp
-    src/Skybox.hpp
     src/Texture.cpp
     src/Texture.hpp
     src/Triangle.cpp
