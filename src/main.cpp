@@ -1,5 +1,6 @@
 #include "Mountain.hpp"
 #include "World.hpp"
+#include "Skybox.hpp"
 
 #include "Util.hpp"
 
@@ -14,8 +15,10 @@ int main()
 		World world("flaming-octo-avenger");
 
 		Mountain mountain;
+		Skybox skybox;
 
 		world.add_object(mountain);
+		world.add_object(skybox);
 
 		world.main_loop();
 	} catch (Util::base_exception& e) {

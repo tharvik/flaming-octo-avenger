@@ -40,14 +40,8 @@ World::World(std::string const name)
 
 	glClearColor(0.9, 0.9, 0.9, 1);
 
-	glm::mat4 mat;
-
-	mat[0] = { 0.970836,    0, -0.485418,         0};
-	mat[1] = {-0.182574,    0.912871, -0.365148, -0.228218};
-	mat[2] = {-0.0408248,  -0.0408248,-0.0816497,  0.500104};
-	mat[3] = { 0,           0,         0,         1};
-
-	this->mvp = mat;
+	mvp = glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	mvp = glm::rotate(mvp, 0.42f, glm::vec3(0.5f,0.5f,0.0f));
 
 	glfwGetWindowSize(window, &this->width, &this->height);
 
@@ -65,18 +59,8 @@ void World::key_callback(GLFWwindow* window,
 {
 	if (action == GLFW_RELEASE || mods != 0)
 		return;
-
+	
 	glm::mat4 & mvp = world->mvp;
-
-	float const angle = 0.01;
-	float const scale = 1;
-
-	glm::mat4 x_plus = glm::rotate(angle, glm::vec3(1, 0, 0));
-	glm::mat4 y_plus = glm::rotate(angle, glm::vec3(0, 1, 0));
-	glm::mat4 z_plus = glm::rotate(angle, glm::vec3(0, 0, 1));
-	glm::mat4 x_minus = glm::rotate(-angle, glm::vec3(1, 0, 0));
-	glm::mat4 y_minus = glm::rotate(-angle, glm::vec3(0, 1, 0));
-	glm::mat4 z_minus = glm::rotate(-angle, glm::vec3(0, 0, 1));
 
 	switch (key) {
 		case GLFW_KEY_ESCAPE:
@@ -84,38 +68,27 @@ void World::key_callback(GLFWwindow* window,
 			break;
 
 		case GLFW_KEY_LEFT:
-			mvp = x_plus * mvp;
+			mvp = glm::rotate(mvp, 0.01f, glm::vec3(0.0f,1.0f,0.0f));
 			break;
 		case GLFW_KEY_RIGHT:
-			mvp = x_minus * mvp;
+			mvp = glm::rotate(mvp, -0.01f, glm::vec3(0.0f,1.0f,0.0f));
 			break;
 
 		case GLFW_KEY_UP:
-			mvp = y_plus * mvp;
+			mvp = glm::rotate(mvp, 0.01f, glm::vec3(1.0f,0.0f,0.0f));
 			break;
 		case GLFW_KEY_DOWN:
-			mvp = y_minus * mvp;
+			mvp = glm::rotate(mvp, -0.01f, glm::vec3(1.0f,0.0f,0.0f));
 			break;
 
-		case GLFW_KEY_A:
-			mvp = z_plus * mvp;
+		case GLFW_KEY_Q:
+			mvp = glm::rotate(mvp, 0.01f, glm::vec3(0.0f,0.0f,1.0f));
 			break;
-		case GLFW_KEY_D:
-			mvp = z_minus * mvp;
+		case GLFW_KEY_E:
+			mvp = glm::rotate(mvp, -0.01f, glm::vec3(0.0f,0.0f,1.0f));
 			break;
 
-		case GLFW_KEY_W:
-			mvp *= scale;
-			break;
-		case GLFW_KEY_S:
-			mvp /= scale;
-			break;
 	}
-
-	/*std::cout << mvp.w << '\t'
-		  << mvp.x << '\t'
-		  << mvp.y << '\t'
-		  << mvp.z << std::endl;*/
 
 	world->update_objects();
 }

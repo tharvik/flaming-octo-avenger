@@ -54,4 +54,4 @@ add_custom_target(common_headers SOURCES ${COMMON_DIR_HEADERS})
 
 #--- Common headers/libraries for all the exercises
 include_directories(${CMAKE_CURRENT_LIST_DIR})
-SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} png noise)
+SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} png)

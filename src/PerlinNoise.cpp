@@ -3,9 +3,10 @@
 #include "Plane.hpp"
 
 #include <algorithm>
-#include <noise/noise.h>
 
 #include <iostream>
+
+#include <math.h>
 
 /**
  * @todo remove deps on libnoise
@@ -21,8 +22,6 @@ PerlinNoise::PerlinNoise(size_t const size)
 	std::vector<uint32_t> data;
 	data.reserve(size * size);
 
-	noise::module::Perlin myModule;
-
 	/*double const x_base = 0.5;
 	double const y_base = 0.1;
 	double const x_end = 1.6;
@@ -37,13 +36,31 @@ PerlinNoise::PerlinNoise(size_t const size)
 
 	for (double x = x_base; x < x_end; x += (x_end - x_base) / size) {
 		for (double y = y_base; y < y_end; y += (y_end - y_base) / size) {
-			double value = myModule.GetValue(x, ground, y) / 9;
-			value += 0.11;
+			double value = 0.0;
+			double signal = 0.0;
+			double curPersistence = 1.0;
+			double nx = x;
+			double ng = ground;
+			double ny = y;
+
+			for (int curOctave = 0; curOctave < 32; curOctave++) {
+
+
+			  // Get the coherent-noise value from the input value and add it to the
+			  // final result.
+			  signal = GradientCoherentNoise3D (x, ground, y, curOctave);
+			  value += signal * curPersistence;
+
+			  // Prepare the next octave.
+			  nx *= 2.0;
+			  ng *= 2.0;
+			  ny *= 2.0;
+			  curPersistence *= 0.5;
+			}
+
 			if (value < 0)
 				value = 0;
-
-			value = 6 * std::pow(value, 5) - 15 * std::pow(value, 4) + 10 * std::pow(value, 3);
-
+			value = value / 9;
 			data.push_back(value * 0xFF);
 		}
 	}
@@ -60,6 +77,96 @@ PerlinNoise::PerlinNoise(size_t const size)
 
 	framebuffer.unbind();
 	//program.unbind();
+}
+
+//Adapted from the source code found in libnoise
+double PerlinNoise::GradientCoherentNoise3D (double x, double y, double z, int seed)
+{
+  // Create a unit-length cube aligned along an integer boundary.  This cube
+  // surrounds the input point.
+  int x0 = (x > 0.0? (int)x: (int)x - 1);
+  int x1 = x0 + 1;
+  int y0 = (y > 0.0? (int)y: (int)y - 1);
+  int y1 = y0 + 1;
+  int z0 = (z > 0.0? (int)z: (int)z - 1);
+  int z1 = z0 + 1;
+
+  // Map the difference between the coordinates of the input value and the
+  // coordinates of the cube's outer-lower-left vertex onto an S-curve.
+  double xs = 0, ys = 0, zs = 0, a, a3, a4, a5;
+  
+  a = x - (double)x0;
+  a3 = a * a * a;
+  a4 = a3 * a;
+  a5 = a4 * a;
+  xs = (6.0 * a5) - (15.0 * a4) + (10.0 * a3);
+
+  a = y - (double)y0;
+  a3 = a * a * a;
+  a4 = a3 * a;
+  a5 = a4 * a;
+  ys = (6.0 * a5) - (15.0 * a4) + (10.0 * a3);
+  
+  a = z - (double)z0;
+  a3 = a * a * a;
+  a4 = a3 * a;
+  a5 = a4 * a;
+  zs = (6.0 * a5) - (15.0 * a4) + (10.0 * a3);
+
+  // Now calculate the noise values at each vertex of the cube.  To generate
+  // the coherent-noise value at the input point, interpolate these eight
+  // noise values using the S-curve value as the interpolant (trilinear
+  // interpolation.)
+  double n0, n1, ix0, ix1, iy0, iy1;
+  n0   = GradientNoise3D (x, y, z, x0, y0, z0, seed);
+  n1   = GradientNoise3D (x, y, z, x1, y0, z0, seed);
+  ix0  = ((1.0 - xs) * n0) + (xs * n1);
+  n0   = GradientNoise3D (x, y, z, x0, y1, z0, seed);
+  n1   = GradientNoise3D (x, y, z, x1, y1, z0, seed);
+  ix1  = ((1.0 - xs) * n0) + (xs * n1);
+  iy0  = ((1.0 - ys) * ix0) + (ys * ix1);;
+  n0   = GradientNoise3D (x, y, z, x0, y0, z1, seed);
+  n1   = GradientNoise3D (x, y, z, x1, y0, z1, seed);
+  ix0  = ((1.0 - xs) * n0) + (xs * n1);
+  n0   = GradientNoise3D (x, y, z, x0, y1, z1, seed);
+  n1   = GradientNoise3D (x, y, z, x1, y1, z1, seed);
+  ix1  = ((1.0 - xs) * n0) + (xs * n1);
+  iy1  = ((1.0 - ys) * ix0) + (ys * ix1);
+  
+  return ((1.0 - zs) * iy0) + (zs * iy1);
+}
+
+double PerlinNoise::GradientNoise3D (double fx, double fy, double fz, int ix,
+  int iy, int iz, int seed)
+{
+  // Randomly generate a gradient vector given the integer coordinates of the
+  // input value.  This implementation generates a random number and uses it
+  // as an index into a normalized-vector lookup table.
+  int vectorIndex = (
+      1619     * ix
+    + 31337    * iy
+    + 6971     * iz
+    + 1013     * seed)
+    & 0xffffffff;
+  vectorIndex ^= (vectorIndex >> 8);
+  vectorIndex &= 0xff;
+
+  double xvGradient = g_randomVectors[(vectorIndex << 2)    ];
+  double yvGradient = g_randomVectors[(vectorIndex << 2) + 1];
+  double zvGradient = g_randomVectors[(vectorIndex << 2) + 2];
+
+  // Set up us another vector equal to the distance between the two vectors
+  // passed to this function.
+  double xvPoint = (fx - (double)ix);
+  double yvPoint = (fy - (double)iy);
+  double zvPoint = (fz - (double)iz);
+
+  // Now compute the dot product of the gradient vector with the distance
+  // vector.  The resulting value is gradient noise.  Apply a scaling value
+  // so that this noise value ranges from -1.0 to 1.0.
+  return ((xvGradient * xvPoint)
+    + (yvGradient * yvPoint)
+    + (zvGradient * zvPoint)) * 2.12;
 }
 
 Texture PerlinNoise::get_texture(std::string const name) const
