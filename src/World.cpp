@@ -41,7 +41,7 @@ World::World(std::string const name)
 	glClearColor(0.9, 0.9, 0.9, 1);
 
 	mvp = glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-	mvp = glm::rotate(mvp, 0.42f, glm::vec3(0.5f,0.5f,0.0f));
+	mvp = glm::rotate(mvp, -0.56f, glm::vec3(0.64f,0.08f,0.0f));
 
 	glfwGetWindowSize(window, &this->width, &this->height);
 

@@ -5,7 +5,7 @@
 #include "PerlinNoise.hpp"
 
 Skybox::Skybox(size_t const size)
-	: Object("skybox", get_attributes(size))
+	: Object("skybox", get_attributes(size), std::set<Uniform>(), get_texture(size))
 {}
 
 std::set<Attribute> Skybox::get_attributes(size_t const size)
@@ -34,9 +34,9 @@ std::vector<GLfloat> Skybox::get_points(size_t const size)
 		GLfloat y = i & (0x1 << 1);
 		GLfloat z = i & (0x1 << 0);
 
-		x = (x == 0) ? -1 : 1;
-		y = (y == 0) ? -1 : 1;
-		z = (z == 0) ? -1 : 1;
+		x = (x == 0) ? -2 : 2;
+		y = (y == 0) ? -2 : 2;
+		z = (z == 0) ? -2 : 2;
 
 		vertices.push_back(x);
 		vertices.push_back(y);
@@ -97,4 +97,13 @@ std::vector<GLuint> Skybox::get_indices(size_t const size)
 	indices.push_back(3);
 
 	return indices;
+}
+
+std::set<Texture> Skybox::get_texture(size_t const size)
+{
+	std::set<Texture> textures;
+
+	textures.emplace("sky.png", "sky");
+	
+	return textures;
 }

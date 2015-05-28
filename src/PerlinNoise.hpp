@@ -9,10 +9,10 @@ class PerlinNoise {
 	public:
 		PerlinNoise(size_t const size = 100);
 		
-		double GradientCoherentNoise3D (double x, double y, double z, int seed);
+		double generateNoise (double x, double y, double z);
 		
-		double GradientNoise3D (double fx, double fy, double fz, int ix,
-  int iy, int iz, int seed);
+		double GradientNoise (double fx, double fy, double fz, int ix,
+  int iy, int iz);
 
 		Texture get_texture(std::string const name) const;
 		

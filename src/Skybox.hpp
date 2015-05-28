@@ -29,6 +29,8 @@ private:
 	 * @return the indices of the points to draw
 	 */
 	static std::vector<GLuint> get_indices(size_t const size);
+	
+	static std::set<Texture> get_texture(size_t const size);
 };
 
 #endif

@@ -37,30 +37,14 @@ PerlinNoise::PerlinNoise(size_t const size)
 	for (double x = x_base; x < x_end; x += (x_end - x_base) / size) {
 		for (double y = y_base; y < y_end; y += (y_end - y_base) / size) {
 			double value = 0.0;
-			double signal = 0.0;
-			double curPersistence = 1.0;
-			double nx = x;
-			double ng = ground;
-			double ny = y;
 
-			for (int curOctave = 0; curOctave < 32; curOctave++) {
-
-
-			  // Get the coherent-noise value from the input value and add it to the
-			  // final result.
-			  signal = GradientCoherentNoise3D (x, ground, y, curOctave);
-			  value += signal * curPersistence;
-
-			  // Prepare the next octave.
-			  nx *= 2.0;
-			  ng *= 2.0;
-			  ny *= 2.0;
-			  curPersistence *= 0.5;
-			}
+			// Get the coherent-noise value from the input value and add it to the
+			// final result.
+			value = generateNoise (x, ground, y);
 
 			if (value < 0)
 				value = 0;
-			value = value / 9;
+			value = value / 7;
 			data.push_back(value * 0xFF);
 		}
 	}
@@ -80,7 +64,7 @@ PerlinNoise::PerlinNoise(size_t const size)
 }
 
 //Adapted from the source code found in libnoise
-double PerlinNoise::GradientCoherentNoise3D (double x, double y, double z, int seed)
+double PerlinNoise::generateNoise (double x, double y, double z)
 {
   // Create a unit-length cube aligned along an integer boundary.  This cube
   // surrounds the input point.
@@ -118,26 +102,26 @@ double PerlinNoise::GradientCoherentNoise3D (double x, double y, double z, int s
   // noise values using the S-curve value as the interpolant (trilinear
   // interpolation.)
   double n0, n1, ix0, ix1, iy0, iy1;
-  n0   = GradientNoise3D (x, y, z, x0, y0, z0, seed);
-  n1   = GradientNoise3D (x, y, z, x1, y0, z0, seed);
+  n0   = GradientNoise (x, y, z, x0, y0, z0);
+  n1   = GradientNoise (x, y, z, x1, y0, z0);
   ix0  = ((1.0 - xs) * n0) + (xs * n1);
-  n0   = GradientNoise3D (x, y, z, x0, y1, z0, seed);
-  n1   = GradientNoise3D (x, y, z, x1, y1, z0, seed);
+  n0   = GradientNoise (x, y, z, x0, y1, z0);
+  n1   = GradientNoise (x, y, z, x1, y1, z0);
   ix1  = ((1.0 - xs) * n0) + (xs * n1);
   iy0  = ((1.0 - ys) * ix0) + (ys * ix1);;
-  n0   = GradientNoise3D (x, y, z, x0, y0, z1, seed);
-  n1   = GradientNoise3D (x, y, z, x1, y0, z1, seed);
+  n0   = GradientNoise (x, y, z, x0, y0, z1);
+  n1   = GradientNoise (x, y, z, x1, y0, z1);
   ix0  = ((1.0 - xs) * n0) + (xs * n1);
-  n0   = GradientNoise3D (x, y, z, x0, y1, z1, seed);
-  n1   = GradientNoise3D (x, y, z, x1, y1, z1, seed);
+  n0   = GradientNoise (x, y, z, x0, y1, z1);
+  n1   = GradientNoise (x, y, z, x1, y1, z1);
   ix1  = ((1.0 - xs) * n0) + (xs * n1);
   iy1  = ((1.0 - ys) * ix0) + (ys * ix1);
   
   return ((1.0 - zs) * iy0) + (zs * iy1);
 }
 
-double PerlinNoise::GradientNoise3D (double fx, double fy, double fz, int ix,
-  int iy, int iz, int seed)
+double PerlinNoise::GradientNoise (double fx, double fy, double fz, int ix,
+  int iy, int iz)
 {
   // Randomly generate a gradient vector given the integer coordinates of the
   // input value.  This implementation generates a random number and uses it
@@ -146,7 +130,7 @@ double PerlinNoise::GradientNoise3D (double fx, double fy, double fz, int ix,
       1619     * ix
     + 31337    * iy
     + 6971     * iz
-    + 1013     * seed)
+    + 1013     )
     & 0xffffffff;
   vectorIndex ^= (vectorIndex >> 8);
   vectorIndex &= 0xff;
